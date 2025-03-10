@@ -1,11 +1,12 @@
-
 import React from 'react';
+import './Header.css';
 
 const Header = () => {
   return (
-    <header style={{ backgroundColor: '#1DA1F2', padding: '10px 20px', color: 'white' }}>
+    <div className="header">
+      <header style={{ backgroundColor: '#1DA1F2', padding: '10px 20px', color: 'white' }}>
       <div className="logo">
-        <h1>Twitter Clone</h1>
+        <h1>Twitter</h1>
       </div>
       <nav>
         <ul style={{ listStyle: 'none', display: 'flex', gap: '15px', margin: 0 }}>
@@ -15,7 +16,9 @@ const Header = () => {
           <li><a href="/profile" style={{ color: 'white', textDecoration: 'none' }}>Profile</a></li>
         </ul>
       </nav>
-    </header>
+      </header>
+    </div>
+    
   );
 }
 
