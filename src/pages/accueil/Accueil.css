@@ -1,4 +1,4 @@
-.homepage-container {
+/* .homepage-container {
     width : 100%;
     display: grid;
     grid-template-columns: 250px 1fr 350px; 
@@ -6,73 +6,63 @@
     padding: 20px;
     justify-content: center;
   }
-  
-  .navigator {
-    background-color: #f5f8fa;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
-  .navigator ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .navigator li {
-    margin: 10px 0;
-  }
-  
-  .navigator a {
-    text-decoration: none;
-    color: #1DA1F2;
-  }
-  
-  .posts-container {
-    background-color: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: relative;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .post {
-    background-color: #f7f7f7;
-    padding: 15px;
-    border-radius: 10px;
-  }
-  
-  .post-header {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-  
-  .avatar {
-    border-radius: 50%;
-  }
-  
-  .username {
-    font-weight: bold;
-  }
-  
-  .timestamp {
-    color: gray;
-  }
-  
-  .trends {
-    background-color: #f5f8fa;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
-  .trends ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .trends li {
-    margin: 5px 0;
-  }
+   */
+
+/* .homepage-container {
+max-width: 600px; 
+margin: 0 auto;
+padding: 20px;
+display: flex;
+flex-direction: column;
+gap: 20px; 
+} */
+
+.posts-container {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: relative;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.post {
+  background-color: #f7f7f7;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.post-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.timestamp {
+  color: gray;
+}
+
+.trends {
+  background-color: #f5f8fa;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.trends ul {
+  list-style: none;
+  padding: 0;
+}
+
+.trends li {
+  margin: 5px 0;
+}
   
