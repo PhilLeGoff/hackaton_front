@@ -67,6 +67,7 @@ const TweetService = {
    */
    getTweets: async (page = 1, limit = 10) => {
     try {
+      console.log("getting tweets")
       const response = await axios.get(`${API_BASE_URL}/?page=${page}&limit=${limit}`, {
         headers: getAuthHeaders(),
       });

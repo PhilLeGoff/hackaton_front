@@ -20,6 +20,8 @@ const Accueil = () => {
 
     try {
       const data = await TweetService.getTweets(page, 10);
+      console.log("📥 Tweets Fetched:", data);
+      
       setTweets((prevTweets) => [...prevTweets, ...data.tweets]);
       setPage(page + 1);
       setHasMore(data.hasMore);
@@ -30,21 +32,34 @@ const Accueil = () => {
     }
   };
 
-  // Callback for new tweets
+  // ✅ Corrected: Reload tweets after posting
   const handleNewTweet = async () => {
+    console.log("🆕 New tweet posted, refreshing feed...");
+    
+    // Reset state to fetch fresh tweets
     setPage(1);
-    setTweets([]);
-    loadTweets();
+    setHasMore(true);
+    setTweets([]); // 🔥 Clear previous tweets
+    
+    try {
+      const data = await TweetService.getTweets(1, 10); // 🔥 Fetch fresh tweets
+      setTweets(data.tweets);
+    } catch (error) {
+      console.error("❌ Error fetching fresh tweets:", error);
+    }
   };
 
   return (
     <div className="homepage-container">
-      <TweetPost onTweetPosted={handleNewTweet} /> {/* 🔥 New TweetPost Component */}
+      <TweetPost onTweetPosted={handleNewTweet} /> {/* ✅ Post Component */}
+      
       <div className="posts-container">
         {tweets.map((tweet, i) => (
           <Tweet key={i} tweet={tweet} />
         ))}
+
         {loading && <p>Loading more tweets...</p>}
+        
         {!loading && hasMore && (
           <button className="load-more" onClick={loadTweets}>
             Load More Tweets

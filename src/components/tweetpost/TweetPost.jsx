@@ -46,7 +46,7 @@ const TweetPost = ({ onTweetPosted }) => {
       setMediaPreview(null);
 
       // Notify parent (Accueil) to reload tweets
-      if (onTweetPosted) onTweetPosted();
+      onTweetPosted();
     } catch (error) {
       console.error("❌ Tweet Error:", error);
       setMessage("❌ Failed to post tweet.");
