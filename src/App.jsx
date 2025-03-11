@@ -1,17 +1,10 @@
-import React from 'react';
-import Header from './components/header/Header.jsx';
-import Footer from './components/footer/Footer.jsx';
-import Body from './components/body/Body.jsx';
-import './App.css'; 
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./routes/Routes";
 
-const App = () => {
+export default function App() {
   return (
-    <div className="app-container">
-      <Header />
-      <Body />
-      <Footer />
-    </div>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
-
-export default App;
