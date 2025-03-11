@@ -1,3 +1,10 @@
+.mains {
+  width : 100%;
+  padding-top: 60px;   /* Space for the fixed header */
+  padding-bottom: 60px; /* Space for the fixed footer */
+  margin: 0;
+  box-sizing: border-box;
+}
 .body {
     width: 100%;
   }
