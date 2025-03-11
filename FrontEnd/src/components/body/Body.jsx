@@ -17,7 +17,7 @@ import './Body.css';
 
 const Body = () => {
   return (
-    <div>
+    <div classname = "mains">
       <Accueil />  
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Login.css"; 
 
 const Login = () => {
@@ -9,7 +10,9 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (email === "test@example.com" && password === "password") {
+
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser && email === storedUser.email && password === storedUser.password) {
       localStorage.setItem("isAuthenticated", "true");
       navigate("/home");
     } else {
@@ -21,7 +24,7 @@ const Login = () => {
     <div className="login-container">
    
       <div className="login-left">
-        <h1 className="login-logo">Twitter Clone</h1>
+        <h1 className="login-logo">Twitter</h1>
       </div>
 
   
@@ -47,8 +50,8 @@ const Login = () => {
           <button type="submit" className="login-button">Log in</button>
         </form>
         <p>
-          <a href="#" className="login-link">Forgot password?</a> · 
-          <a href="#" className="login-link">Sign up for Twitter</a>
+          <a href="#" className="login-link">Forgot password?</a> 
+          <Link to="/signup" className="login-link">Sign up for Twitter</Link>
         </p>
       </div>
     </div>

@@ -1,7 +1,8 @@
-/* login.css */
 .login-container {
     display: flex;
     height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
     align-items: center;
     justify-content: center;
     background-color: #f5f8fa;

@@ -6,17 +6,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from "./routes/Routes";
 import './App.css'; 
 
-// const App = () => {
-//   return (
-//     <div className="app-container">
-//       <Header />
-//       <Body />
-//       <Footer />
-//     </div>
-//   );
-// }
-
-// export default App;
 
 
 function App() {
