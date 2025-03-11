@@ -23,11 +23,11 @@ const SignUp = () => {
   return (
     <div className="login-container">
       <div className="login-left">
-        <h1 className="login-logo">Twitter</h1>
+        <h1 className="login-logo">EmoTwitt</h1>
       </div>
 
       <div className="login-right">
-        <h2>Create your Twitter account</h2>
+        <h2>Create your Emotwitt account</h2>
         <form onSubmit={handleSignUp} className="login-form">
           <input
             type="text"

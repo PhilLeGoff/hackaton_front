@@ -6,6 +6,9 @@ import "./Login.css";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [checkbox, setCheckbox] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
@@ -24,12 +27,12 @@ const Login = () => {
     <div className="login-container">
    
       <div className="login-left">
-        <h1 className="login-logo">Twitter</h1>
+        <h1 className="login-logo">EmoTwitt</h1>
       </div>
 
   
       <div className="login-right">
-        <h2>Sign in to Twitter</h2>
+        <h2>Sign in to EmoTwitt</h2>
         <form onSubmit={handleLogin} className="login-form">
           <input
             type="email"
@@ -51,7 +54,7 @@ const Login = () => {
         </form>
         <p>
           <a href="#" className="login-link">Forgot password?</a> 
-          <Link to="/signup" className="login-link">Sign up for Twitter</Link>
+          <Link to="/signup" className="login-link">Sign up for EmoTwitt</Link>
         </p>
       </div>
     </div>
