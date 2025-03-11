@@ -1,14 +1,14 @@
 import { useState } from "react";
-
+import { useNavigate, Link } from "react-router-dom";
 import AuthService from "../../services/AuthService";
-import { useNavigate } from "react-router-dom";
+import "./Login.css"; 
 
-export default function Login() {
+const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [user, setUser] = useState(AuthService.getUser());
-  const navigate = useNavigate()
+
+  const navigate = useNavigate();
 
   // Handle Input Change
   const handleChange = (e) => {
@@ -24,7 +24,7 @@ export default function Login() {
     try {
       await AuthService.loginUser(formData);
       setMessage("✅ Login successful!");
-      navigate('/')
+      navigate("/");
     } catch (error) {
       console.error("❌ Login Error:", error);
       setMessage(error.message || "Login failed");
@@ -34,20 +34,50 @@ export default function Login() {
   };
 
   return (
-    <div className="container">
-      <h1>Login</h1>
-      {user ? (
-        <p>Welcome back, {user.username}! 🎉</p>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-          <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-          <button type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
+    <div className="login-container">
+      {/* Left Side Branding */}
+      <div className="login-left">
+        <h1 className="login-logo">EmoTwitt</h1>
+      </div>
+
+      {/* Login Form */}
+      <div className="login-right">
+        <h2>Sign in to EmoTwitt</h2>
+        <form onSubmit={handleSubmit} className="login-form">
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            className="login-input"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className="login-input"
+            required
+          />
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? "Logging in..." : "Log in"}
           </button>
         </form>
-      )}
-      {message && <p>{message}</p>}
+
+        {/* Error Message */}
+        {message && <p className="login-message">{message}</p>}
+
+        {/* Links */}
+        <p>
+          <a href="#" className="login-link">Forgot password?</a>  
+          <Link to="/signup" className="login-link">Sign up for EmoTwitt</Link>
+        </p>
+      </div>
     </div>
   );
-}
+};
+
+export default Login;

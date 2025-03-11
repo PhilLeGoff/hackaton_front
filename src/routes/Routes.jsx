@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Signup from "../pages/signup/Signup";
@@ -18,7 +17,6 @@ export default function AppRoutes() {
 
   return (
     <Routes>
-      {/* If user is NOT authenticated, redirect to login */}
       {!isAuthenticated ? (
         <>
           <Route path="/login" element={<Login />} />
@@ -26,11 +24,13 @@ export default function AppRoutes() {
           <Route path="*" element={<Navigate to="/login" replace />} />
         </>
       ) : (
-        <>
-          {/* If authenticated, redirect to homepage */}
-          <Route path="/" element={<Layout />} />
+        // ✅ This Layout wraps the pages, keeping Header/Footer fixed
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Accueil />} /> 
+          <Route path="profile" element={<div>Profile Page</div>} /> 
+          <Route path="explore" element={<div>Explore Page</div>} /> 
           <Route path="*" element={<Navigate to="/" replace />} />
-        </>
+        </Route>
       )}
     </Routes>
   );

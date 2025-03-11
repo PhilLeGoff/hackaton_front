@@ -1,0 +1,45 @@
+.tweet {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.username {
+  color: #1DA1F2;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.tweet-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.tweet-media {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.tweet-image {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 5px;
+}
+
+.tweet-video {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 5px;
+}
