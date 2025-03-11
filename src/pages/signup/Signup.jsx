@@ -1,74 +1,72 @@
 import { useState } from "react";
+import AuthService from "../../services/AuthService";
 import { useNavigate } from "react-router-dom";
-import "../login/Login.css"; // You can use the same styles as Login
 
-const SignUp = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate();
+export default function Signup() {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    bio: "",
+    avatar: null, // File
+  });
 
-  const handleSignUp = (e) => {
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [user, setUser] = useState(AuthService.getUser()); // Load user from storage
+  const navigate = useNavigate()
+  // Handle Input Change
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Handle File Change
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, avatar: e.target.files[0] });
+  };
+
+  // Handle Form Submit
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
-      localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("user", JSON.stringify({ name, email, password }));
-      navigate("/home"); 
-    } else {
-      alert("Passwords do not match");
+    setLoading(true);
+    setMessage("");
+
+    try {
+      await AuthService.registerUser(formData);
+      setMessage("✅ Registration successful!");
+      setUser(AuthService.getUser());
+      navigate('/')
+       // Update user state after registration
+    } catch (error) {
+      console.error("❌ Registration Error:", error);
+      setMessage(error.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-left">
-        <h1 className="login-logo">EmoTwitt</h1>
-      </div>
 
-      <div className="login-right">
-        <h2>Create your Emotwitt account</h2>
-        <form onSubmit={handleSignUp} className="login-form">
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="login-input"
-            required
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="login-input"
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="login-input"
-            required
-          />
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="login-input"
-            required
-          />
-          <button type="submit" className="login-button">Sign up</button>
+    <div className="container">
+      <h1>Signup</h1>
+      {user ? (
+        <p>Welcome, {user.username}! 🎉</p>
+      ) : (
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <input type="text" name="username" placeholder="Username" onChange={handleChange} required />
+          <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+          <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+          <input type="text" name="bio" placeholder="Bio" onChange={handleChange} required />
+          <label htmlFor="avatar" className="file-input-label">
+            Choose an avatar
+            <input type="file" name="avatar" id="avatar" accept="image/*" onChange={handleFileChange} required />
+          </label>
+          <button type="submit" disabled={loading}>
+            {loading ? "Signing up..." : "Signup"}
+          </button>
         </form>
-        <p>
-          <a href="/login" className="login-link">Already have an account? Log in</a>
-        </p>
-      </div>
+      )}
+      {message && <p>{message}</p>}
     </div>
   );
-};
-
-export default SignUp;
+}

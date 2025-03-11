@@ -1,20 +1,11 @@
-import React from 'react';
-// import Header from './components/header/Header.jsx';
-// import Footer from './components/footer/Footer.jsx';
-// import Body from './components/body/Body.jsx';
-import { BrowserRouter as Router } from "react-router-dom";
+
+import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/Routes";
-import './App.css'; 
 
-
-
-function App() {
+export default function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <AppRoutes />
-    </Router>
+    </BrowserRouter>
   );
 }
-
-export default App;
-

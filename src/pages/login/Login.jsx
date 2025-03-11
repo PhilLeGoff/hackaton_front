@@ -1,64 +1,53 @@
 import { useState } from "react";
+
+import AuthService from "../../services/AuthService";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import "./Login.css"; 
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [checkbox, setCheckbox] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+export default function Login() {
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [user, setUser] = useState(AuthService.getUser());
+  const navigate = useNavigate()
 
-  const navigate = useNavigate();
+  // Handle Input Change
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-  const handleLogin = (e) => {
+  // Handle Form Submit
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage("");
 
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser && email === storedUser.email && password === storedUser.password) {
-      localStorage.setItem("isAuthenticated", "true");
-      navigate("/home");
-    } else {
-      alert("Invalid credentials");
+    try {
+      await AuthService.loginUser(formData);
+      setMessage("✅ Login successful!");
+      navigate('/')
+    } catch (error) {
+      console.error("❌ Login Error:", error);
+      setMessage(error.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
-   
-      <div className="login-left">
-        <h1 className="login-logo">EmoTwitt</h1>
-      </div>
-
-  
-      <div className="login-right">
-        <h2>Sign in to EmoTwitt</h2>
-        <form onSubmit={handleLogin} className="login-form">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="login-input"
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="login-input"
-            required
-          />
-          <button type="submit" className="login-button">Log in</button>
+    <div className="container">
+      <h1>Login</h1>
+      {user ? (
+        <p>Welcome back, {user.username}! 🎉</p>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+          <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+          <button type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
         </form>
-        <p>
-          <a href="#" className="login-link">Forgot password?</a> 
-          <Link to="/signup" className="login-link">Sign up for EmoTwitt</Link>
-        </p>
-      </div>
+      )}
+      {message && <p>{message}</p>}
     </div>
   );
-};
-
-export default Login;
+}

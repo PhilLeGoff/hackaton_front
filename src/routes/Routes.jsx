@@ -1,25 +1,37 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Accueil from "../pages/accueil/Accueil";
+
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Signup from "../pages/signup/Signup";
 import Login from "../pages/login/Login";
-import SignUp from "../pages/signup/Signup";
-import Layout from "../components/layout/Layout";
+import Accueil from "../pages/accueil/Accueil";
+import AuthService from "../services/AuthService";
+import Layout from "../layout/Layout";
 
-const PrivateRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem("isAuthenticated");
-  return isAuthenticated ? children : <Navigate to="/login" />;
-};
+export default function AppRoutes() {
+  const [isAuthenticated, setIsAuthenticated] = useState(AuthService.getToken() !== null);
+  const location = useLocation();
 
-const AppRoutes = () => {
+  // Re-check authentication when the route changes
+  useEffect(() => {
+    setIsAuthenticated(AuthService.getToken() !== null);
+  }, [location]);
+
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Login />} /> 
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/home" element={<PrivateRoute><Accueil /></PrivateRoute>} />
-        <Route path="*" element={<Navigate to="/" />} />
-        </Route>
+      {/* If user is NOT authenticated, redirect to login */}
+      {!isAuthenticated ? (
+        <>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </>
+      ) : (
+        <>
+          {/* If authenticated, redirect to homepage */}
+          <Route path="/" element={<Layout />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </>
+      )}
     </Routes>
   );
-};
-
-export default AppRoutes;
+}
