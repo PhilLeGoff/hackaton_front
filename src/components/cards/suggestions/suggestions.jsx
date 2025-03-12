@@ -1,13 +1,14 @@
 import React from 'react';
+import './Suggestions.css';
 
 const Suggestions = () => {
   return (
     <div className="trends">
-      <h2>People You May Know</h2>
+      <h2>👥 Personnes que vous pourriez connaître</h2>
       <ul>
-        <li>Jane Smith</li>
-        <li>Michael Johnson</li>
-        <li>Alice Brown</li>
+        <li>👤Jennifer HOUNGBEDJI </li>
+        <li>👤Omomene Iwelomen </li>
+        <li>👤Soraya El Djama </li>
       </ul>
     </div>
   );

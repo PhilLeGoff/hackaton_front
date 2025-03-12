@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import AuthService from "../../services/AuthService";
-import "../login/Login.css"; // Using the same styles as login
+import "../login/Login.css"; // Réutilisation du style de connexion
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +10,7 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
     bio: "",
-    avatar: null, // File
+    avatar: null, // Fichier
   });
 
   const [loading, setLoading] = useState(false);
@@ -18,35 +18,35 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
-  // Handle Input Change
+  // Gérer les changements des champs du formulaire
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle File Change
+  // Gérer le téléchargement d’un fichier (avatar)
   const handleFileChange = (e) => {
     setFormData({ ...formData, avatar: e.target.files[0] });
   };
 
-  // Handle Form Submit
+  // Gérer la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     if (formData.password !== formData.confirmPassword) {
-      setMessage("❌ Passwords do not match!");
+      setMessage("⚠️ Les mots de passe ne correspondent pas !");
       setLoading(false);
       return;
     }
 
     try {
       await AuthService.registerUser(formData);
-      setMessage("✅ Registration successful!");
+      setMessage("🎉 Inscription réussie !");
       navigate("/login");
     } catch (error) {
-      console.error("❌ Registration Error:", error);
-      setMessage(error.message || "Registration failed");
+      console.error("😢 Erreur d'inscription :", error);
+      setMessage(error.message || "L'inscription a échoué");
     } finally {
       setLoading(false);
     }
@@ -54,19 +54,19 @@ const Signup = () => {
 
   return (
     <div className="login-container">
-      {/* Left Side Branding */}
+      {/* Branding côté gauche */}
       <div className="login-left">
         <h1 className="login-logo">EmoTwitt</h1>
       </div>
 
-      {/* Signup Form */}
+      {/* Formulaire d'inscription */}
       <div className="login-right">
-        <h2>Create your EmoTwitt account</h2>
+        <h2>📝 Créer votre compte EmoTwitt</h2>
         <form onSubmit={handleSubmit} encType="multipart/form-data" className="login-form">
           <input
             type="text"
             name="username"
-            placeholder="Username"
+            placeholder="👤 Nom d'utilisateur"
             value={formData.username}
             onChange={handleChange}
             className="login-input"
@@ -75,7 +75,7 @@ const Signup = () => {
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder="📧 Email"
             value={formData.email}
             onChange={handleChange}
             className="login-input"
@@ -84,7 +84,7 @@ const Signup = () => {
           <input
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder="🔑 Mot de passe"
             value={formData.password}
             onChange={handleChange}
             className="login-input"
@@ -93,7 +93,7 @@ const Signup = () => {
           <input
             type="password"
             name="confirmPassword"
-            placeholder="Confirm Password"
+            placeholder="🔄 Confirmez le mot de passe"
             value={formData.confirmPassword}
             onChange={handleChange}
             className="login-input"
@@ -102,27 +102,27 @@ const Signup = () => {
           {/* <input
             type="text"
             name="bio"
-            placeholder="Bio"
+            placeholder="📝 Bio"
             value={formData.bio}
             onChange={handleChange}
             className="login-input"
             required
           /> */}
           <label className="file-input-label">
-            Upload Avatar
+            📸 Télécharger un avatar
             <input type="file" name="avatar" accept="image/*" onChange={handleFileChange} />
           </label>
           <button type="submit" className="login-button" disabled={loading}>
-            {loading ? "Signing up..." : "Sign up"}
+            {loading ? "⏳ Inscription en cours..." : "🚀 S'inscrire"}
           </button>
         </form>
 
-        {/* Error Message */}
+        {/* Message d'erreur */}
         {message && <p className="login-message">{message}</p>}
 
-        {/* Links */}
+        {/* Liens supplémentaires */}
         <p>
-          <Link to="/login" className="login-link">Already have an account? Log in</Link>
+          <Link to="/login" className="login-link">🔑 Vous avez déjà un compte ? Connectez-vous</Link>
         </p>
       </div>
     </div>

@@ -3,94 +3,91 @@ import TweetService from "../../services/TweetService";
 import "./Tweet.css";
 
 const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
-  // Determine if it's a retweet & select the correct tweet to interact with
-  const isRetweet = !!tweet.originalTweet;
-  const tweetToInteractWith = isRetweet ? tweet.originalTweet : tweet;
+  // Déterminer si c'est un repartage & sélectionner le bon imote
+  const isRepartage = !!tweet.originalTweet;
+  const imoteAInteragir = isRepartage ? tweet.originalTweet : tweet;
 
-  // State for likes & retweets
-  const [likes, setLikes] = useState(tweetToInteractWith.likes.length);
-  const [retweets, setRetweets] = useState(tweetToInteractWith.retweets.length);
-  const [hasLiked, setHasLiked] = useState(false);
-  const [hasRetweeted, setHasRetweeted] = useState(false);
-  const [retweetText, setRetweetText] = useState("");
-  const [showRetweetInput, setShowRetweetInput] = useState(false);
+  // États pour les likes & repartages
+  const [likes, setLikes] = useState(imoteAInteragir.likes.length);
+  const [repartages, setRepartages] = useState(imoteAInteragir.retweets.length);
+  const [aAime, setAAime] = useState(false);
+  const [aRepartage, setARepartage] = useState(false);
+  const [commentaireRepartage, setCommentaireRepartage] = useState("");
+  const [afficherZoneRepartage, setAfficherZoneRepartage] = useState(false);
 
   useEffect(() => {
     if (loggedInUser) {
-      setHasLiked(
-        tweetToInteractWith.likes.some((like) => like.toString() === loggedInUser._id.toString())
+      setAAime(
+        imoteAInteragir.likes.some((like) => like.toString() === loggedInUser._id.toString())
       );
-      setHasRetweeted(
-        tweetToInteractWith.retweets.some((retweet) => retweet.toString() === loggedInUser._id.toString())
+      setARepartage(
+        imoteAInteragir.retweets.some((retweet) => retweet.toString() === loggedInUser._id.toString())
       );
     }
-  }, [tweetToInteractWith.likes, tweetToInteractWith.retweets, loggedInUser]);
+  }, [imoteAInteragir.likes, imoteAInteragir.retweets, loggedInUser]);
 
-  // ✅ Handle Like/Unlike (Triggers Feed Refresh)
+  // 🎉 Gérer le Like / Unlike
   const handleLike = async () => {
     try {
-      await TweetService.likeTweet(tweetToInteractWith._id);
-      setHasLiked(!hasLiked);
-      setLikes(hasLiked ? likes - 1 : likes + 1);
-      
-      // ✅ Refresh feed after like action
+      await TweetService.likeTweet(imoteAInteragir._id);
+      setAAime(!aAime);
+      setLikes(aAime ? likes - 1 : likes + 1);
+
       if (onInteraction) onInteraction();
     } catch (error) {
-      console.error("❌ Error liking tweet:", error);
+      console.error("😞 Erreur lors du like :", error);
     }
   };
 
-  // ✅ Handle Retweet
-  const handleRetweet = async () => {
+  // 🔄 Gérer le repartage
+  const handleRepartage = async () => {
     try {
-      await TweetService.retweet(tweetToInteractWith._id, loggedInUser._id, retweetText);
-      setHasRetweeted(true);
-      setRetweets(retweets + 1);
-      setShowRetweetInput(false);
-      setRetweetText("");
+      await TweetService.retweet(imoteAInteragir._id, loggedInUser._id, commentaireRepartage);
+      setARepartage(true);
+      setRepartages(repartages + 1);
+      setAfficherZoneRepartage(false);
+      setCommentaireRepartage("");
 
-      // ✅ Refresh feed after retweet
       if (onInteraction) onInteraction();
     } catch (error) {
-      console.error("❌ Error retweeting:", error);
+      console.error("😓 Erreur lors du repartage :", error);
     }
   };
 
-  // ✅ Handle Undo Retweet (Directly Calls the Service)
-  const handleUndoRetweet = async () => {
+  // ❌ Annuler un repartage
+  const handleAnnulerRepartage = async () => {
     try {
-      await TweetService.undoRetweet(tweetToInteractWith._id);
-      setHasRetweeted(false);
-      setRetweets(retweets - 1);
+      await TweetService.undoRetweet(imoteAInteragir._id);
+      setARepartage(false);
+      setRepartages(repartages - 1);
 
-      // ✅ Refresh feed after undo retweet
       if (onInteraction) onInteraction();
     } catch (error) {
-      console.error("❌ Error undoing retweet:", error);
+      console.error("😣 Erreur lors de l'annulation du repartage :", error);
     }
   };
 
   return (
     <div className="tweet">
-      {/* If this is a retweet, show who retweeted it */}
-      {isRetweet && (
-        <p className="retweet-info">🔄 Retweeted by @{tweet.retweetedBy?.username}</p>
+      {/* Si c'est un repartage, afficher l'utilisateur qui a repartagé */}
+      {isRepartage && (
+        <p className="repartage-info">🔄 Repartagé par @{tweet.retweetedBy?.username}</p>
       )}
 
-      {/* If it's a retweet with additional comment, display it */}
-      {isRetweet && tweet.text && <p className="retweet-text">🗣️ {tweet.text}</p>}
+      {/* Afficher le commentaire du repartage */}
+      {isRepartage && tweet.text && <p className="repartage-texte">🗣️ {tweet.text}</p>}
 
-      {/* Main Tweet Content (for original tweets) */}
-      {!isRetweet && (
+      {/* Contenu principal de l'imote */}
+      {!isRepartage && (
         <div className="tweet-content">
           <h3 className="username">@{tweet.userId?.username}</h3>
           <p>{tweet.text}</p>
 
-          {/* Show media if available */}
+          {/* Afficher une image ou une vidéo si disponible */}
           {tweet.media && tweet.media.url && (
             <div className="tweet-media">
               {tweet.media.type === "image" ? (
-                <img src={tweet.media.url} alt="Tweet Media" className="tweet-image" />
+                <img src={tweet.media.url} alt="📸 Média de l'imote" className="tweet-image" />
               ) : (
                 <video src={tweet.media.url} controls className="tweet-video" />
               )}
@@ -99,66 +96,65 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
         </div>
       )}
 
-      {/* ✅ If this is a retweet, display the original tweet below it with like/retweet buttons */}
-      {isRetweet && (
+      {/* Si c'est un repartage, afficher l'imote original */}
+      {isRepartage && (
         <div className="original-tweet">
           <h3 className="username">@{tweet.originalTweet.userId?.username}</h3>
           <p>{tweet.originalTweet.text}</p>
 
-          {/* Show media from the original tweet if available */}
+          {/* Afficher le média de l'imote original */}
           {tweet.originalTweet.media && tweet.originalTweet.media.url && (
             <div className="tweet-media">
               {tweet.originalTweet.media.type === "image" ? (
-                <img src={tweet.originalTweet.media.url} alt="Tweet Media" className="tweet-image" />
+                <img src={tweet.originalTweet.media.url} alt="📸 Média de l'imote" className="tweet-image" />
               ) : (
                 <video src={tweet.originalTweet.media.url} controls className="tweet-video" />
               )}
             </div>
           )}
 
-          {/* ✅ Like & Retweet buttons for the original tweet */}
+          {/* Boutons J'aime et Repartager pour l'imote original */}
           <div className="tweet-actions">
             <button onClick={handleLike}>
-              {hasLiked ? "💔 Unlike" : "❤️ Like"} {tweetToInteractWith.likes.length}
+              {aAime ? "💔 Je n'aime plus" : "❤️ J'aime"} {imoteAInteragir.likes.length}
             </button>
             
-            {/* ✅ If the user has retweeted, show "Undo Retweet" */}
-            {hasRetweeted ? (
-              <button onClick={handleUndoRetweet}>❌ Undo Retweet {tweetToInteractWith.retweets.length}</button>
+            {aRepartage ? (
+              <button onClick={handleAnnulerRepartage}>😢 Annuler repartage {imoteAInteragir.retweets.length}</button>
             ) : (
-              <button onClick={() => setShowRetweetInput(!showRetweetInput)}>
-                🔄 Retweet {tweetToInteractWith.retweets.length}
+              <button onClick={() => setAfficherZoneRepartage(!afficherZoneRepartage)}>
+                🔄 Repartager {imoteAInteragir.retweets.length}
               </button>
             )}
           </div>
         </div>
       )}
 
-      {/* ✅ Like & Retweet buttons for normal tweets (if not a retweet) */}
-      {!isRetweet && (
+      {/* Boutons J'aime et Repartager pour les imotes normaux */}
+      {!isRepartage && (
         <div className="tweet-actions">
           <button onClick={handleLike}>
-            {hasLiked ? "💔 Unlike" : "❤️ Like"} {tweetToInteractWith.likes.length}
+            {aAime ? "💔 Je n'aime plus" : "❤️ J'aime"} {imoteAInteragir.likes.length}
           </button>
-          {hasRetweeted ? (
-            <button onClick={handleUndoRetweet}>❌ Undo Retweet {tweetToInteractWith.retweets.length}</button>
+          {aRepartage ? (
+            <button onClick={handleAnnulerRepartage}>😢 Annuler repartage {imoteAInteragir.retweets.length}</button>
           ) : (
-            <button onClick={() => setShowRetweetInput(!showRetweetInput)}>
-              🔄 Retweet {tweetToInteractWith.retweets.length}
+            <button onClick={() => setAfficherZoneRepartage(!afficherZoneRepartage)}>
+              🔄 Repartager {imoteAInteragir.retweets.length}
             </button>
           )}
         </div>
       )}
 
-      {/* Retweet Text Input */}
-      {showRetweetInput && !hasRetweeted && (
-        <div className="retweet-input">
+      {/* Zone pour ajouter un commentaire lors d'un repartage */}
+      {afficherZoneRepartage && !aRepartage && (
+        <div className="repartage-input">
           <textarea
-            placeholder="Add a comment to your retweet..."
-            value={retweetText}
-            onChange={(e) => setRetweetText(e.target.value)}
+            placeholder="Ajoutez un commentaire à votre repartage... ✍️"
+            value={commentaireRepartage}
+            onChange={(e) => setCommentaireRepartage(e.target.value)}
           />
-          <button onClick={handleRetweet}>Confirm Retweet</button>
+          <button onClick={handleRepartage}>✅ Confirmer le repartage</button>
         </div>
       )}
     </div>

@@ -9,15 +9,15 @@ const TweetPost = ({ onTweetPosted }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Retrieve token
+  // Récupérer le token
   const token = localStorage.getItem("token");
 
-  // Handle text change
+  // Gérer le changement de texte
   const handleTextChange = (e) => {
     setTweetText(e.target.value);
   };
 
-  // Handle file selection (image/video)
+  // Gérer la sélection de fichier (image/vidéo)
   const handleMediaChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -26,30 +26,30 @@ const TweetPost = ({ onTweetPosted }) => {
     }
   };
 
-  // Handle tweet submission
+  // Gérer la publication d'un imote
   const handleTweetSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     if (!token) {
-      setMessage("❌ You must be logged in to tweet.");
+      setMessage("😡 Vous devez être connecté pour publier un imote !");
       setLoading(false);
       return;
     }
 
     try {
       await TweetService.createTweet({ text: tweetText, media, token });
-      setMessage("✅ Tweet posted successfully!");
+      setMessage("😃 Imote publié avec succès ! 🎉");
       setTweetText("");
       setMedia(null);
       setMediaPreview(null);
 
-      // Notify parent (Accueil) to reload tweets
+      // Notifier le parent (Accueil) pour recharger les imotes
       onTweetPosted();
     } catch (error) {
-      console.error("❌ Tweet Error:", error);
-      setMessage("❌ Failed to post tweet.");
+      console.error("😓 Erreur lors de la publication de l'imote :", error);
+      setMessage("😞 Échec de la publication de l'imote.");
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ const TweetPost = ({ onTweetPosted }) => {
       <form onSubmit={handleTweetSubmit} className="tweet-form">
         <input
           type="text"
-          placeholder="What's happening?"
+          placeholder="Quoi de neuf ? 😃"
           value={tweetText}
           onChange={handleTextChange}
           maxLength={280}
@@ -68,18 +68,18 @@ const TweetPost = ({ onTweetPosted }) => {
           className="tweet-input"
         />
         <label className="media-label">
-          📸
+          📸 Ajouter une image ou une vidéo
           <input type="file" accept="image/*,video/*" onChange={handleMediaChange} style={{ display: "none" }} />
         </label>
         <button type="submit" disabled={loading} className="tweet-button">
-          {loading ? "Tweeting..." : "Tweet"}
+          {loading ? "⏳ Publication en cours... 😬" : " Publier 😃"}
         </button>
       </form>
 
       {mediaPreview && (
         <div className="media-preview">
           {media?.type?.startsWith("image") ? (
-            <img src={mediaPreview} alt="Preview" />
+            <img src={mediaPreview} alt="🖼️ Aperçu 😍" />
           ) : (
             <video src={mediaPreview} controls />
           )}

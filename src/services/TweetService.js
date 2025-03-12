@@ -4,16 +4,16 @@ const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api/tweets`;
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");
-  if (!token) throw new Error("User not authenticated");
+  if (!token) throw new Error("Utilisateur non authentifié");
 
   return { Authorization: `Bearer ${token}` };
 };
 
 const TweetService = {
-   /**
-   * Create a tweet with optional media
+  /**
+   * Créer un imote avec un média optionnel
    */
-   createTweet: async ({ text, media }) => {
+  createTweet: async ({ text, media }) => {
     try {
       const formData = new FormData();
       formData.append("text", text);
@@ -31,55 +31,55 @@ const TweetService = {
 
       return response.data;
     } catch (error) {
-      console.error("❌ Tweet Creation Error:", error.response?.data || error.message);
-      throw error.response?.data || { message: "Tweet creation failed" };
+      console.error("😢 Erreur lors de la création de l'imote :", error.response?.data || error.message);
+      throw error.response?.data || { message: "Échec de la création de l'imote" };
     }
   },
 
   /**
-   * Fetch trending hashtags
+   * Récupérer les hashtags populaires
    */
   getTrendingHashtags: async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/trending-hashtags`);
       return response.data;
     } catch (error) {
-      console.error("❌ Error fetching trending hashtags:", error);
-      throw new Error("Failed to fetch trending hashtags");
+      console.error("😵 Erreur lors de la récupération des hashtags tendances :", error);
+      throw new Error("Impossible de récupérer les hashtags tendances");
     }
   },
 
   /**
-   * Search tweets by hashtag
+   * Rechercher des imotes par hashtag
    */
   searchByHashtag: async (hashtag) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/hashtag/${hashtag}`);
       return response.data;
     } catch (error) {
-      console.error("❌ Error searching tweets:", error);
-      throw new Error("Failed to search tweets");
+      console.error("🤯 Erreur lors de la recherche d'imotes :", error);
+      throw new Error("Échec de la recherche d'imotes");
     }
   },
 
-   /**
-   * Fetch paginated tweets
+  /**
+   * Récupérer les imotes paginés
    */
-   getTweets: async (page = 1, limit = 10) => {
+  getTweets: async (page = 1, limit = 10) => {
     try {
-      console.log("getting tweets")
+      console.log("📥 Récupération des imotes...");
       const response = await axios.get(`${API_BASE_URL}/?page=${page}&limit=${limit}`, {
         headers: getAuthHeaders(),
       });
       return response.data;
     } catch (error) {
-      console.error("❌ Error fetching tweets:", error);
-      throw new Error("Failed to fetch tweets");
+      console.error("🚨 Erreur lors de la récupération des imotes :", error);
+      throw new Error("Impossible de récupérer les imotes");
     }
   },
 
   /**
-   * Like a tweet
+   * Aimer un imote ❤️
    */
   likeTweet: async (tweetId) => {
     try {
@@ -88,39 +88,42 @@ const TweetService = {
       });
       return response.data;
     } catch (error) {
-      console.error("❌ Error liking tweet:", error);
-      throw new Error("Failed to like the tweet");
+      console.error("💔 Erreur lors de l'ajout du like :", error);
+      throw new Error("Échec de l'ajout du like à l'imote");
     }
   },
 
   /**
-   * Retweet a tweet
+   * Repartager un imote 🔄
    */
   retweet: async (tweetId, userId, text = "") => {
     try {
       const response = await axios.post(
         `${API_BASE_URL}/${tweetId}/retweet`,
-        { text }, // ✅ Send text input
+        { text }, // ✅ Envoi du texte du commentaire
         { headers: getAuthHeaders() }
       );
       return response.data;
     } catch (error) {
-      console.error("❌ Error retweeting:", error);
-      throw new Error("Failed to retweet");
-    }
-  },
-
-  undoRetweet: async (tweetId) => {
-    try {
-      await axios.post(`${API_BASE_URL}/${tweetId}/undo-retweet`, {}, { headers: getAuthHeaders() });
-    } catch (error) {
-      console.error("❌ Error undoing retweet:", error);
-      throw new Error("Failed to undo retweet");
+      console.error("😵 Erreur lors du repartage :", error);
+      throw new Error("Échec du repartage de l'imote");
     }
   },
 
   /**
-   * Delete a tweet
+   * Annuler un repartage ❌
+   */
+  undoRetweet: async (tweetId) => {
+    try {
+      await axios.post(`${API_BASE_URL}/${tweetId}/undo-retweet`, {}, { headers: getAuthHeaders() });
+    } catch (error) {
+      console.error("🤯 Erreur lors de l'annulation du repartage :", error);
+      throw new Error("Échec de l'annulation du repartage");
+    }
+  },
+
+  /**
+   * Supprimer un imote 🗑️
    */
   deleteTweet: async (tweetId) => {
     try {
@@ -129,8 +132,8 @@ const TweetService = {
       });
       return response.data;
     } catch (error) {
-      console.error("❌ Error deleting tweet:", error);
-      throw new Error("Failed to delete the tweet");
+      console.error("❌ Erreur lors de la suppression de l'imote :", error);
+      throw new Error("Impossible de supprimer l'imote");
     }
   },
 };

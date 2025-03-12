@@ -1,10 +1,10 @@
-// src/components/Trends.js
 import React from 'react';
+import './Trends.css';  // ✅ Import du fichier CSS
 
 const Trends = () => {
   return (
     <div className="trends">
-      <h2>Trending</h2>
+      <h2>📈 Tendances</h2> {/* Ajout d'un emoji pour le style */}
       <ul>
         <li>#MERN</li>
         <li>#ReactJS</li>
