@@ -71,8 +71,10 @@ const Accueil = () => {
   return (
     <main className="main-content">
       <div className="homepage-container">
-        {loggedInUser && <TweetPost onTweetPosted={refreshFeed} />}{" "}
-        {/* ✅ Post Component */}
+        <div className="tweet-container">
+          {loggedInUser && <TweetPost onTweetPosted={refreshFeed} />}{" "}
+          {/* ✅ Post Component */}
+        </div>
         <div className="posts-container">
           {tweets.map((tweet, i) => (
             <Tweet

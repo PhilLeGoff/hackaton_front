@@ -56,7 +56,7 @@ const TweetPost = ({ onTweetPosted }) => {
   };
 
   return (
-    <div className="tweet-post">
+    <div className=".homepage-container">
       <form onSubmit={handleTweetSubmit} className="tweet-form">
         <input
           type="text"

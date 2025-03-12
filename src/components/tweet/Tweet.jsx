@@ -162,6 +162,7 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
         </div>
       )}
     </div>
+   
   );
 };
 

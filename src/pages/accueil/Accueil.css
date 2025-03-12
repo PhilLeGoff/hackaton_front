@@ -1,10 +1,13 @@
 .main-content {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  justify-items: center;
   align-items: center;
   margin-top: 60px; /* Push content below fixed header */
-  padding-top: 10px;
+  padding-top: 30px;
   width: 100vw;
+  margin: 0px 0px;
 }
 
 
@@ -13,45 +16,27 @@
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  /* max-width: 1100px; Prevent excessive width */
-  min-height: calc(100vh - 60px); /* Full height minus header */
   background-color: #f5f8fa;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
+  align-items: center;
+  padding-top: 30px;
+  padding-bottom: 50px;
+  margin: 0%;
 }
 
-
-/* Ensuring it doesn't affect the header */
-.posts-container,
 .trends-container,
 .sugg-container,
 .tweet-container {
-  background-color: #f9f9f9;
+  background-color: #fff;
   border-radius: 8px;
   padding: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 80%; /* Adjust the width to avoid stretching */
-  /* Prevent it from getting too large on wide screens */
-}
-
-/* For posts section */
-.posts-container {
-
-  background-color: white;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
+  width: 73%; 
   align-items: center;
-  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
-  width: 80%;  /* Prevent them from getting too big on large screens */
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  justify-content: center;
 }
-
-
 
 .post {
   background-color: #f7f7f7;
@@ -78,7 +63,7 @@
 }
 /* Load More Button */
 .load-more {
-  background-color: #FF6B6B;
+  background-color: #FF85A1;
   color: white;
   padding: 10px;
   font-size: 16px;
@@ -92,4 +77,11 @@
 
 .load-more:hover {
   background-color: #0d8edb;
+}
+
+@media (max-width: 1100px) {
+  .main-content {
+    max-width: 1200px;
+  }
+
 }

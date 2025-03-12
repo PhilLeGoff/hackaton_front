@@ -56,6 +56,9 @@ const Signup = () => {
     <div className="login-container">
       {/* Left Side Branding */}
       <div className="login-left">
+      <div className="logo">
+        <img src="https://i.imgur.com/iV5PR2K.png" alt="EmoTwitt Logo" className="logo-image" />
+      </div>
         <h1 className="login-logo">EmoTwitt</h1>
       </div>
 
