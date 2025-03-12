@@ -36,7 +36,7 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
       // ✅ Refresh feed after like action
       if (onInteraction) onInteraction();
     } catch (error) {
-      console.error("❌ Error liking tweet:", error);
+      console.error("😞 Erreur lors du like:", error);
     }
   };
 
@@ -52,7 +52,7 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
       // ✅ Refresh feed after retweet
       if (onInteraction) onInteraction();
     } catch (error) {
-      console.error("❌ Error retweeting:", error);
+      console.error("😓 Erreur lors du repartage:", error);
     }
   };
 
@@ -66,7 +66,7 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
       // ✅ Refresh feed after undo retweet
       if (onInteraction) onInteraction();
     } catch (error) {
-      console.error("❌ Error undoing retweet:", error);
+      console.error("😣 Erreur lors de l'annulation du repartage :", error);
     }
   };
 
@@ -74,7 +74,7 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
     <div className="tweet">
       {/* If this is a retweet, show who retweeted it */}
       {isRetweet && (
-        <p className="retweet-info">🔄 Retweeted by @{tweet.retweetedBy?.username}</p>
+        <p className="retweet-info">🔄 Repartagé par @{tweet.retweetedBy?.username}</p>
       )}
 
       {/* If it's a retweet with additional comment, display it */}
@@ -119,15 +119,15 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
           {/* ✅ Like & Retweet buttons for the original tweet */}
           <div className="tweet-actions">
             <button onClick={handleLike}>
-              {hasLiked ? "💔 Unlike" : "❤️ Like"} {tweetToInteractWith.likes.length}
+              {hasLiked ? "💔 Je n'aime plus" : "❤️ J'aime"} {tweetToInteractWith.likes.length}
             </button>
             
             {/* ✅ If the user has retweeted, show "Undo Retweet" */}
             {hasRetweeted ? (
-              <button onClick={handleUndoRetweet}>❌ Undo Retweet {tweetToInteractWith.retweets.length}</button>
+              <button onClick={handleUndoRetweet}>😢 Annuler repartage {tweetToInteractWith.retweets.length}</button>
             ) : (
               <button onClick={() => setShowRetweetInput(!showRetweetInput)}>
-                🔄 Retweet {tweetToInteractWith.retweets.length}
+                🔄 Repartager {tweetToInteractWith.retweets.length}
               </button>
             )}
           </div>
@@ -138,13 +138,13 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
       {!isRetweet && (
         <div className="tweet-actions">
           <button onClick={handleLike}>
-            {hasLiked ? "💔 Unlike" : "❤️ Like"} {tweetToInteractWith.likes.length}
+            {hasLiked ? "💔 Je n'aime plus" : "❤️ J'aime"} {tweetToInteractWith.likes.length}
           </button>
           {hasRetweeted ? (
-            <button onClick={handleUndoRetweet}>❌ Undo Retweet {tweetToInteractWith.retweets.length}</button>
+            <button onClick={handleUndoRetweet}>😢 Annuler repartage {tweetToInteractWith.retweets.length}</button>
           ) : (
             <button onClick={() => setShowRetweetInput(!showRetweetInput)}>
-              🔄 Retweet {tweetToInteractWith.retweets.length}
+              🔄 Repartager {tweetToInteractWith.retweets.length}
             </button>
           )}
         </div>
@@ -158,7 +158,7 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
             value={retweetText}
             onChange={(e) => setRetweetText(e.target.value)}
           />
-          <button onClick={handleRetweet}>Confirm Retweet</button>
+          <button onClick={handleRetweet}>✅ Confirmer le repartage</button>
         </div>
       )}
     </div>

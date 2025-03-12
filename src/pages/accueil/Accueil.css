@@ -44,6 +44,12 @@
   border-radius: 10px;
 }
 
+.posts-container {
+ align-items: center;
+ justify-content: center;
+ justify-items: center;
+}
+
 .post-header {
   display: flex;
   gap: 10px;
@@ -70,9 +76,11 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 100%;
+  width: 200px;
   margin-top: 10px;
   text-align: center;
+  justify-content: center;
+  justify-items: center;
 }
 
 .load-more:hover {

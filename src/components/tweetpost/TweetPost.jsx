@@ -33,14 +33,14 @@ const TweetPost = ({ onTweetPosted }) => {
     setMessage("");
 
     if (!token) {
-      setMessage("❌ You must be logged in to tweet.");
+      setMessage("😡 Vous devez être connecté pour publier un emote !");
       setLoading(false);
       return;
     }
 
     try {
       await TweetService.createTweet({ text: tweetText, media, token });
-      setMessage("✅ Tweet posted successfully!");
+      setMessage("😃 Emote publié avec succès ! 🎉");
       setTweetText("");
       setMedia(null);
       setMediaPreview(null);
@@ -48,8 +48,8 @@ const TweetPost = ({ onTweetPosted }) => {
       // Notify parent (Accueil) to reload tweets
       onTweetPosted();
     } catch (error) {
-      console.error("❌ Tweet Error:", error);
-      setMessage("❌ Failed to post tweet.");
+      console.error("😓 Erreur lors de la publication de l'emote :", error);
+      setMessage("😞 Échec de la publication de l'emote");
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ const TweetPost = ({ onTweetPosted }) => {
       <form onSubmit={handleTweetSubmit} className="tweet-form">
         <input
           type="text"
-          placeholder="What's happening?"
+          placeholder="Quoi de neuf ? 😃"
           value={tweetText}
           onChange={handleTextChange}
           maxLength={280}
@@ -72,14 +72,14 @@ const TweetPost = ({ onTweetPosted }) => {
           <input type="file" accept="image/*,video/*" onChange={handleMediaChange} style={{ display: "none" }} />
         </label>
         <button type="submit" disabled={loading} className="tweet-button">
-          {loading ? "Tweeting..." : "Tweet"}
+          {loading ? "⏳ Publication en cours... 😬" : " Emote"}
         </button>
       </form>
 
       {mediaPreview && (
         <div className="media-preview">
           {media?.type?.startsWith("image") ? (
-            <img src={mediaPreview} alt="Preview" />
+            <img src={mediaPreview} alt="🖼️ Aperçu 😍" />
           ) : (
             <video src={mediaPreview} controls />
           )}

@@ -27,7 +27,7 @@ const Header = () => {
           <div className="search-container">
             <input
               type="text"
-              placeholder="Search Emotes..."
+              placeholder="Rechercher Emotes..."
               value={searchQuery}
               onChange={handleSearchChange}
               className="search-input"

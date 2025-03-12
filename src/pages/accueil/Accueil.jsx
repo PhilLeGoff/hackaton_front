@@ -23,7 +23,7 @@ const Accueil = () => {
           setLoggedInUser(JSON.parse(user)); // ✅ Parse JSON string
         }
       } catch (error) {
-        console.error("❌ Error fetching user from localStorage:", error);
+        console.error("😢 Erreur lors de la récupération de l'utilisateur :", error);
       }
     };
 
@@ -37,13 +37,13 @@ const Accueil = () => {
 
     try {
       const data = await TweetService.getTweets(page, 10);
-      console.log("📥 Tweets Fetched:", data);
+      console.log("📥 Emotes récupérés :", data);
 
       setTweets((prevTweets) => [...prevTweets, ...data.tweets]); // Append new tweets
       setPage(page + 1);
       setHasMore(data.hasMore);
     } catch (error) {
-      console.error("❌ Error fetching tweets:", error);
+      console.error(" 😢 Erreur lors de la récupération des imotes:", error);
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,7 @@ const Accueil = () => {
 
   // ✅ Reload tweets when a new tweet is posted or interacted with (Like/Retweet)
   const refreshFeed = async () => {
-    console.log("🔄 Refreshing feed after interaction...");
+    console.log("🔄 Rafraîchissement du fil après interaction...");
 
     setPage(1);
     setHasMore(true);
@@ -59,10 +59,10 @@ const Accueil = () => {
 
     try {
       const data = await TweetService.getTweets(1, 10); // Fetch fresh tweets
-      console.log("✅ Fresh tweets fetched");
+      console.log("✅ Emotes mis à jour");
       setTweets(data.tweets); // 🔥 Replace old tweets instead of appending
     } catch (error) {
-      console.error("❌ Error refreshing tweets:", error);
+      console.error("😢 Erreur lors du rafraîchissement des Emotes :", error);
     } finally {
       setLoading(false);
     }
@@ -85,11 +85,11 @@ const Accueil = () => {
             />
           ))}
 
-          {loading && <p>Loading more tweets...</p>}
+          {loading && <p>⏳ Chargement des Emotes...</p>}
 
           {!loading && hasMore && (
             <button className="load-more" onClick={loadTweets}>
-              Load More Tweets
+              Charger plus...
             </button>
           )}
         </div>
