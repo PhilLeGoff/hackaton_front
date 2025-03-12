@@ -29,6 +29,14 @@ header {
   padding: 10px 0;
   background-color: #1DA1F2;
   color: white;
+  position: fixed; /* Keeps header at the top */
+  top: 0; /* Aligns at the top */
+  left: 0;
+  z-index: 1000; /* Ensures it's above everything */
+  height: 60px; /* Set a fixed height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Footer - Stick to bottom */

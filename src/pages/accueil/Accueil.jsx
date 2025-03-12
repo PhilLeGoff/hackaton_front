@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import TweetService from "../../services/TweetService";
 import Tweet from "../../components/tweet/Tweet"; // Tweet component
 import TweetPost from "../../components/tweetpost/TweetPost"; // New Tweet Post component
-import Trends from '../../components/cards/trends/Trends.jsx';
-import Suggestions from '../../components/cards/suggestions/suggestions.jsx';
+import Trends from "../../components/cards/trends/Trends.jsx";
+import Suggestions from "../../components/cards/suggestions/suggestions.jsx";
 import "./Accueil.css";
 
 const Accueil = () => {
@@ -19,6 +19,7 @@ const Accueil = () => {
       try {
         const user = localStorage.getItem("user");
         if (user) {
+          console.log("loged in user")
           setLoggedInUser(JSON.parse(user)); // ✅ Parse JSON string
         }
       } catch (error) {
@@ -51,7 +52,7 @@ const Accueil = () => {
   // ✅ Reload tweets when a new tweet is posted or interacted with (Like/Retweet)
   const refreshFeed = async () => {
     console.log("🔄 Refreshing feed after interaction...");
-    
+
     setPage(1);
     setHasMore(true);
     setLoading(true); // Prevent duplicate calls
@@ -68,19 +69,22 @@ const Accueil = () => {
   };
 
   return (
-
-    
-    <div className="homepage-container">
-
-      {loggedInUser && <TweetPost onTweetPosted={refreshFeed} />} {/* ✅ Post Component */}
-
-      <div className="posts-container">
-        {tweets.map((tweet, i) => (
-          <Tweet key={i} tweet={tweet} loggedInUser={loggedInUser} onInteraction={refreshFeed} />
-        ))}
+    <main className="main-content">
+      <div className="homepage-container">
+        {loggedInUser && <TweetPost onTweetPosted={refreshFeed} />}{" "}
+        {/* ✅ Post Component */}
+        <div className="posts-container">
+          {tweets.map((tweet, i) => (
+            <Tweet
+              key={i}
+              tweet={tweet}
+              loggedInUser={loggedInUser}
+              onInteraction={refreshFeed}
+            />
+          ))}
 
           {loading && <p>Loading more tweets...</p>}
-          
+
           {!loading && hasMore && (
             <button className="load-more" onClick={loadTweets}>
               Load More Tweets
@@ -91,12 +95,10 @@ const Accueil = () => {
           <Trends />
         </div>
         <div className="sugg-container">
-          <Suggestions/>
+          <Suggestions />
         </div>
       </div>
-      </main>
-
-    
+    </main>
   );
 };
 

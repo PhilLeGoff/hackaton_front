@@ -1,26 +1,3 @@
-// import React from "react";
-// import "./Header.css";
-// import LogoutButton from "../LogoutButton";
-
-// const Header = () => {
-//   return (
-//     <header className="header">
-//       <div className="logo">
-//         <h1>Twitter</h1>
-//       </div>
-
-//       <nav>
-        
-//       </nav>
-
-//       <LogoutButton />
-//     </header>
-//   );
-// };
-
-// export default Header;
-
-
 import React, { useState } from 'react';
 import './Header.css';
 import LogoutButton from "./LogoutButton";
