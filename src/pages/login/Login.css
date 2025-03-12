@@ -1,18 +1,18 @@
 .login-container {
   display: flex;
-  width: 100vw; /* Full width */
-  height: 100vh; /* Full height */
+  width: 100vw; 
+  height: 100vh; 
   align-items: center;
   justify-content: center;
   background-color: #f5f8fa;
 }
 
 .login-left {
-  flex: 1; /* Take half the screen */
+  flex: 1; 
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #1DA1F2;
+  background-color: #008080;
   color: #fff;
   height: 100%;
   width: 10%;
@@ -24,7 +24,7 @@
 }
 
 .login-right {
-  flex: 1; /* Take the other half */
+  flex: 1; 
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -67,7 +67,7 @@
 }
 
 .login-button {
-  background-color: #1DA1F2;
+  background-color: #FF6B6B;
   color: #fff;
   padding: 12px;
   font-size: 16px;
@@ -88,7 +88,7 @@
 }
 
 .login-link {
-  color: #1DA1F2;
+  color: #008080;
   text-decoration: none;
   margin: 0 5px;
 }
