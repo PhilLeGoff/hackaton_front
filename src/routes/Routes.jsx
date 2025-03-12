@@ -4,6 +4,7 @@ import Signup from "../pages/signup/Signup";
 import Login from "../pages/login/Login";
 import Accueil from "../pages/accueil/Accueil";
 import AuthService from "../services/AuthService";
+import UserProfile from "../components/profil/UserProfile";
 import Layout from "../layout/Layout";
 
 export default function AppRoutes() {
@@ -25,9 +26,9 @@ export default function AppRoutes() {
         </>
       ) : (
         // ✅ This Layout wraps the pages, keeping Header/Footer fixed
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Layout />} >
           <Route index element={<Accueil />} /> 
-          <Route path="profile" element={<div>Profile Page</div>} /> 
+          <Route path="profile" element={<UserProfile />} /> 
           <Route path="explore" element={<div>Explore Page</div>} /> 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
