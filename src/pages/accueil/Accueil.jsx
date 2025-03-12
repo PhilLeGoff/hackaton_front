@@ -68,6 +68,7 @@ const Accueil = () => {
   };
 
   return (
+
     
     <div className="homepage-container">
 
@@ -78,21 +79,22 @@ const Accueil = () => {
           <Tweet key={i} tweet={tweet} loggedInUser={loggedInUser} onInteraction={refreshFeed} />
         ))}
 
-        {loading && <p>Loading more tweets...</p>}
-        
-        {!loading && hasMore && (
-          <button className="load-more" onClick={loadTweets}>
-            Load More Tweets
-          </button>
-        )}
+          {loading && <p>Loading more tweets...</p>}
+          
+          {!loading && hasMore && (
+            <button className="load-more" onClick={loadTweets}>
+              Load More Tweets
+            </button>
+          )}
+        </div>
+        <div className="trends-container">
+          <Trends />
+        </div>
+        <div className="sugg-container">
+          <Suggestions/>
+        </div>
       </div>
-      <div className="trends-container">
-        <Trends />
-      </div>
-      <div className="sugg-container">
-        <Suggestions/>
-      </div>
-    </div>
+      </main>
 
     
   );
