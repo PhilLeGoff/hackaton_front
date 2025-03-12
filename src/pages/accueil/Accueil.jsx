@@ -52,31 +52,32 @@ const Accueil = () => {
   };
 
   return (
-    
-    <div className="homepage-container">
-      <div className="tweet-container">
-        <TweetPost onTweetPosted={handleNewTweet} /> {/* ✅ Post Component */}
-      </div>
-      <div className="posts-container">
-        {tweets.map((tweet, i) => (
-          <Tweet key={i} tweet={tweet} />
-        ))}
+    <main className="main-content">
+      <div className="homepage-container">
+        <div className="tweet-container">
+          <TweetPost onTweetPosted={handleNewTweet} /> {/* ✅ Post Component */}
+        </div>
+        <div className="posts-container">
+          {tweets.map((tweet, i) => (
+            <Tweet key={i} tweet={tweet} />
+          ))}
 
-        {loading && <p>Loading more tweets...</p>}
-        
-        {!loading && hasMore && (
-          <button className="load-more" onClick={loadTweets}>
-            Load More Tweets
-          </button>
-        )}
+          {loading && <p>Loading more tweets...</p>}
+          
+          {!loading && hasMore && (
+            <button className="load-more" onClick={loadTweets}>
+              Load More Tweets
+            </button>
+          )}
+        </div>
+        <div className="trends-container">
+          <Trends />
+        </div>
+        <div className="sugg-container">
+          <Suggestions/>
+        </div>
       </div>
-      <div className="trends-container">
-        <Trends />
-      </div>
-      <div className="sugg-container">
-        <Suggestions/>
-      </div>
-    </div>
+      </main>
 
     
   );
