@@ -1,3 +1,4 @@
+/* 🔹 General Tweet Styling */
 .tweet {
   background-color: #fff;
   border-radius: 10px;
@@ -6,14 +7,43 @@
   margin-bottom: 20px;
   width: 100%;
   max-width: 600px;
+  position: relative;
 }
 
+/* 🔹 Username Styling */
 .username {
   color: #1DA1F2;
   font-weight: bold;
   font-size: 18px;
+  margin-bottom: 5px;
 }
 
+/* 🔹 Tweet Text */
+.tweet p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+/* 🔹 Media Styling (Images & Videos) */
+.tweet-media {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.tweet-image,
+.tweet-video {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 5px;
+}
+
+.tweet-video {
+  display: block;
+}
+
+/* 🔹 Tweet Actions */
 .tweet-actions {
   display: flex;
   gap: 15px;
@@ -23,23 +53,96 @@
 button {
   border: none;
   background-color: transparent;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
+  transition: opacity 0.3s ease;
 }
 
-.tweet-media {
+button:hover {
+  opacity: 0.7;
+}
+
+/* 🔹 Retweet Styling */
+.retweet-info {
+  color: #657786;
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-style: italic;
+}
+
+/* 🔹 Retweet Content */
+.retweet-text {
+  font-size: 15px;
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+/* 🔹 Original Tweet Inside a Retweet */
+.original-tweet {
+  background-color: #F5F8FA;
+  border-left: 4px solid #1DA1F2;
+  padding: 10px;
   margin-top: 10px;
-  text-align: center;
+  border-radius: 10px;
 }
 
-.tweet-image {
-  width: 100%;
-  max-width: 500px;
-  border-radius: 5px;
+.original-tweet .username {
+  font-size: 16px;
 }
 
-.tweet-video {
+.original-tweet p {
+  font-size: 14px;
+}
+
+/* 🔹 Retweet Input Box */
+.retweet-input {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.retweet-input textarea {
   width: 100%;
-  max-width: 500px;
-  border-radius: 5px;
+  height: 50px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 14px;
+  resize: none;
+}
+
+.retweet-input button {
+  background-color: #1DA1F2;
+  color: white;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.retweet-input button:hover {
+  background-color: #1991DB;
+}
+
+/* 🔹 Like & Retweet Active State */
+button.liked {
+  color: red;
+}
+
+button.retweeted {
+  color: #1DA1F2;
+}
+
+/* 🔹 Responsive Design */
+@media (max-width: 768px) {
+  .tweet {
+    max-width: 100%;
+  }
+
+  .tweet-image,
+  .tweet-video {
+    max-width: 100%;
+  }
 }

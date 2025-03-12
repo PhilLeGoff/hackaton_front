@@ -33,9 +33,18 @@
 
 /* For posts section */
 .posts-container {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr); /* Three equal columns */
-  gap: 20px;
+
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+  width: 80%;  /* Prevent them from getting too big on large screens */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 
