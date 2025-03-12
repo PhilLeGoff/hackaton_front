@@ -96,15 +96,26 @@ const TweetService = {
   /**
    * Retweet a tweet
    */
-  retweet: async (tweetId) => {
+  retweet: async (tweetId, userId, text = "") => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/${tweetId}/retweet`, {}, {
-        headers: getAuthHeaders(),
-      });
+      const response = await axios.post(
+        `${API_BASE_URL}/${tweetId}/retweet`,
+        { text }, // ✅ Send text input
+        { headers: getAuthHeaders() }
+      );
       return response.data;
     } catch (error) {
       console.error("❌ Error retweeting:", error);
       throw new Error("Failed to retweet");
+    }
+  },
+
+  undoRetweet: async (tweetId) => {
+    try {
+      await axios.post(`${API_BASE_URL}/${tweetId}/undo-retweet`, {}, { headers: getAuthHeaders() });
+    } catch (error) {
+      console.error("❌ Error undoing retweet:", error);
+      throw new Error("Failed to undo retweet");
     }
   },
 
