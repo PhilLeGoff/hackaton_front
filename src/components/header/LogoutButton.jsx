@@ -1,6 +1,7 @@
 import React from "react";
+import './Header.css';
 import { useNavigate } from "react-router-dom";
-import AuthService from "../services/AuthService";
+import AuthService from "../../services/AuthService";
 
 const LogoutButton = () => {
   const navigate = useNavigate();

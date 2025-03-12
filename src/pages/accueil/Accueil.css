@@ -1,37 +1,71 @@
 .homepage-container {
-  width: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 20px;
-  padding: 20px;
+  padding-top: 30px;
+  margin-left: 0px;
+  margin-right: 0px;
+  min-height: fit-content;
+  height: 100vw;
+  width: 100vw; /* Adjusts for padding */
+  margin-top: 30px; /* Adjust according to your header height */
+  padding-bottom: 100px; /* Space below the header */
+  background-color: #f5f8fa;
+  justify-content: center;
+  align-items: center; /* Center items properly */
+  box-sizing: border-box; /* Prevents padding from adding extra width */
+  
 }
 
+
+/* Ensuring it doesn't affect the header */
+.posts-container,
+.trends-container,
+.sugg-container,
+.tweet-container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 80%; /* Adjust the width to avoid stretching */
+  /* Prevent it from getting too large on wide screens */
+}
+
+/* For posts section */
 .posts-container {
-  background-color: white;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 80%;  /* Prevent them from getting too big on large screens */
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); /* Three equal columns */
+  gap: 20px;
 }
 
-/* Tweet card */
+
+
 .post {
   background-color: #f7f7f7;
   padding: 15px;
   border-radius: 10px;
-  width: 100%; /* Ensure tweets take full container width */
 }
 
+.post-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.timestamp {
+  color: gray;
+}
 /* Load More Button */
 .load-more {
-  background-color: #1DA1F2;
+  background-color: #FF6B6B;
   color: white;
   padding: 10px;
   font-size: 16px;

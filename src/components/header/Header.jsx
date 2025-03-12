@@ -1,24 +1,74 @@
-import React from "react";
-import "./Header.css";
-import LogoutButton from "../LogoutButton";
+// import React from "react";
+// import "./Header.css";
+// import LogoutButton from "../LogoutButton";
+
+// const Header = () => {
+//   return (
+//     <header className="header">
+//       <div className="logo">
+//         <h1>Twitter</h1>
+//       </div>
+
+//       <nav>
+        
+//       </nav>
+
+//       <LogoutButton />
+//     </header>
+//   );
+// };
+
+// export default Header;
+
+
+import React, { useState } from 'react';
+import './Header.css';
+import LogoutButton from "./LogoutButton";
 
 const Header = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    alert(`Searching for: ${searchQuery}`);
+  };
+
   return (
     <header className="header">
       <div className="logo">
-        <h1>Twitter</h1>
+        <h1>EmoTwitt</h1>
+      </div> 
+      <div className="search-section">
+        <form onSubmit={handleSearchSubmit} className="search-form">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search Emotes..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="search-input"
+            />
+            <button type="submit" className="search-submit">
+              &#x1F50E;&#xFE0E;
+            </button>
+          </div>
+        </form>
       </div>
-
-      <nav>
-        {/* <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/explore">Explore</a></li>
-          <li><a href="/notifications">Notifications</a></li>
-          <li><a href="/profile">Profile</a></li>
-        </ul> */}
-      </nav>
-
-      <LogoutButton />
+      <div className="nav-container">
+        <nav>
+        <ul className="nav-links">
+          <li><a href="/">Accueil</a></li> |
+          <li><a href="/profile">Mon profil</a></li> |
+          <li><LogoutButton /></li>
+        </ul>
+        </nav>
+        
+      </div>
+      
     </header>
   );
 };

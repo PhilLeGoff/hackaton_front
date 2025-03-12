@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import TweetService from "../../services/TweetService";
 import Tweet from "../../components/tweet/Tweet"; // Tweet component
 import TweetPost from "../../components/tweetpost/TweetPost"; // New Tweet Post component
+import Trends from '../../components/cards/trends/Trends.jsx';
+import Suggestions from '../../components/cards/suggestions/suggestions.jsx';
 import "./Accueil.css";
 
 const Accueil = () => {
@@ -50,9 +52,11 @@ const Accueil = () => {
   };
 
   return (
+    
     <div className="homepage-container">
-      <TweetPost onTweetPosted={handleNewTweet} /> {/* ✅ Post Component */}
-      
+      <div className="tweet-container">
+        <TweetPost onTweetPosted={handleNewTweet} /> {/* ✅ Post Component */}
+      </div>
       <div className="posts-container">
         {tweets.map((tweet, i) => (
           <Tweet key={i} tweet={tweet} />
@@ -66,7 +70,15 @@ const Accueil = () => {
           </button>
         )}
       </div>
+      <div className="trends-container">
+        <Trends />
+      </div>
+      <div className="sugg-container">
+        <Suggestions/>
+      </div>
     </div>
+
+    
   );
 };
 
