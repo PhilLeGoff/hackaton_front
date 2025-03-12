@@ -6,11 +6,25 @@ import "./Accueil.css";
 
 const Accueil = () => {
   const [tweets, setTweets] = useState([]);
+  const [loggedInUser, setLoggedInUser] = useState(null); // ✅ Store logged-in user
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
+  // ✅ Fetch the logged-in user from localStorage when the page loads
   useEffect(() => {
+    const fetchUserFromLocalStorage = () => {
+      try {
+        const user = localStorage.getItem("user");
+        if (user) {
+          setLoggedInUser(JSON.parse(user)); // ✅ Parse JSON string
+        }
+      } catch (error) {
+        console.error("❌ Error fetching user from localStorage:", error);
+      }
+    };
+
+    fetchUserFromLocalStorage();
     loadTweets();
   }, []);
 
@@ -21,8 +35,8 @@ const Accueil = () => {
     try {
       const data = await TweetService.getTweets(page, 10);
       console.log("📥 Tweets Fetched:", data);
-      
-      setTweets((prevTweets) => [...prevTweets, ...data.tweets]);
+
+      setTweets((prevTweets) => [...prevTweets, ...data.tweets]); // Append new tweets
       setPage(page + 1);
       setHasMore(data.hasMore);
     } catch (error) {
@@ -32,30 +46,32 @@ const Accueil = () => {
     }
   };
 
-  // ✅ Corrected: Reload tweets after posting
-  const handleNewTweet = async () => {
-    console.log("🆕 New tweet posted, refreshing feed...");
+  // ✅ Reload tweets when a new tweet is posted or interacted with (Like/Retweet)
+  const refreshFeed = async () => {
+    console.log("🔄 Refreshing feed after interaction...");
     
-    // Reset state to fetch fresh tweets
     setPage(1);
     setHasMore(true);
-    setTweets([]); // 🔥 Clear previous tweets
-    
+    setLoading(true); // Prevent duplicate calls
+
     try {
-      const data = await TweetService.getTweets(1, 10); // 🔥 Fetch fresh tweets
-      setTweets(data.tweets);
+      const data = await TweetService.getTweets(1, 10); // Fetch fresh tweets
+      console.log("✅ Fresh tweets fetched");
+      setTweets(data.tweets); // 🔥 Replace old tweets instead of appending
     } catch (error) {
-      console.error("❌ Error fetching fresh tweets:", error);
+      console.error("❌ Error refreshing tweets:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="homepage-container">
-      <TweetPost onTweetPosted={handleNewTweet} /> {/* ✅ Post Component */}
-      
+      {loggedInUser && <TweetPost onTweetPosted={refreshFeed} />} {/* ✅ Post Component */}
+
       <div className="posts-container">
         {tweets.map((tweet, i) => (
-          <Tweet key={i} tweet={tweet} />
+          <Tweet key={i} tweet={tweet} loggedInUser={loggedInUser} onInteraction={refreshFeed} />
         ))}
 
         {loading && <p>Loading more tweets...</p>}

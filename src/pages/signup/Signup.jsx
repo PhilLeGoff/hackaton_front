@@ -110,7 +110,7 @@ const Signup = () => {
           /> */}
           <label className="file-input-label">
             Upload Avatar
-            <input type="file" name="avatar" accept="image/*" onChange={handleFileChange} required />
+            <input type="file" name="avatar" accept="image/*" onChange={handleFileChange} />
           </label>
           <button type="submit" className="login-button" disabled={loading}>
             {loading ? "Signing up..." : "Sign up"}
