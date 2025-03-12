@@ -10,11 +10,11 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
     bio: "",
-    avatar: null, // File
+    avatar: null, // File (Optional)
   });
 
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // 🔥 Stores error messages
 
   const navigate = useNavigate();
 
@@ -32,21 +32,34 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
+    setErrorMessage("");
+
+    if (!formData.username || !formData.email || !formData.password) {
+      setErrorMessage("⚠️ All fields are required!");
+      setLoading(false);
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
-      setMessage("❌ Passwords do not match!");
+      setErrorMessage("❌ Passwords do not match!");
       setLoading(false);
       return;
     }
 
     try {
       await AuthService.registerUser(formData);
-      setMessage("✅ Registration successful!");
-      navigate("/login");
+      navigate("/login"); // ✅ Redirect after successful signup
     } catch (error) {
       console.error("❌ Registration Error:", error);
-      setMessage(error.message || "Registration failed");
+      
+      // ✅ Handle different errors
+      if (error.message.includes("User already exists")) {
+        setErrorMessage("❌ Email or Username is already taken!");
+      } else if (error.message.includes("Invalid email format")) {
+        setErrorMessage("❌ Please enter a valid email!");
+      } else {
+        setErrorMessage(error.message || "Registration failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -99,17 +112,8 @@ const Signup = () => {
             className="login-input"
             required
           />
-          {/* <input
-            type="text"
-            name="bio"
-            placeholder="Bio"
-            value={formData.bio}
-            onChange={handleChange}
-            className="login-input"
-            required
-          /> */}
           <label className="file-input-label">
-            Upload Avatar
+            Upload Avatar (Optional)
             <input type="file" name="avatar" accept="image/*" onChange={handleFileChange} />
           </label>
           <button type="submit" className="login-button" disabled={loading}>
@@ -117,8 +121,8 @@ const Signup = () => {
           </button>
         </form>
 
-        {/* Error Message */}
-        {message && <p className="login-message">{message}</p>}
+        {/* 🔥 Error Message Display */}
+        {errorMessage && <p className="login-message">{errorMessage}</p>}
 
         {/* Links */}
         <p>

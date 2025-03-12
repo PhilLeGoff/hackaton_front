@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import TweetService from "../../services/TweetService";
 import "./Tweet.css";
+import formatTimestamp from "../../hooks/formatTimeStamp";
+import CommentSection from "../commentSection.js/CommentSection";
 
 const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
   // Determine if it's a retweet & select the correct tweet to interact with
@@ -14,15 +16,22 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
   const [hasRetweeted, setHasRetweeted] = useState(false);
   const [retweetText, setRetweetText] = useState("");
   const [showRetweetInput, setShowRetweetInput] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [showComments, setShowComments] = useState(false);
 
   useEffect(() => {
     if (loggedInUser) {
       setHasLiked(
-        tweetToInteractWith.likes.some((like) => like.toString() === loggedInUser._id.toString())
+        tweetToInteractWith.likes.some(
+          (like) => like.toString() === loggedInUser._id.toString()
+        )
       );
       setHasRetweeted(
-        tweetToInteractWith.retweets.some((retweet) => retweet.toString() === loggedInUser._id.toString())
+        tweetToInteractWith.retweets.some(
+          (retweet) => retweet.toString() === loggedInUser._id.toString()
+        )
       );
+      setIsSaved(loggedInUser.savedTweets.includes(tweetToInteractWith._id));
     }
   }, [tweetToInteractWith.likes, tweetToInteractWith.retweets, loggedInUser]);
 
@@ -32,7 +41,7 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
       await TweetService.likeTweet(tweetToInteractWith._id);
       setHasLiked(!hasLiked);
       setLikes(hasLiked ? likes - 1 : likes + 1);
-      
+
       // ✅ Refresh feed after like action
       if (onInteraction) onInteraction();
     } catch (error) {
@@ -43,7 +52,11 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
   // ✅ Handle Retweet
   const handleRetweet = async () => {
     try {
-      await TweetService.retweet(tweetToInteractWith._id, loggedInUser._id, retweetText);
+      await TweetService.retweet(
+        tweetToInteractWith._id,
+        loggedInUser._id,
+        retweetText
+      );
       setHasRetweeted(true);
       setRetweets(retweets + 1);
       setShowRetweetInput(false);
@@ -70,27 +83,58 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
     }
   };
 
+  const handleSaveTweet = async () => {
+    try {
+      await TweetService.saveTweet(tweetToInteractWith._id);
+      setIsSaved(true);
+      if (onInteraction) onInteraction();
+    } catch (error) {
+      console.error("❌ Error saving tweet:", error);
+    }
+  };
+
+  const handleUnsaveTweet = async () => {
+    try {
+      await TweetService.unsaveTweet(tweetToInteractWith._id);
+      setIsSaved(false);
+      if (onInteraction) onInteraction();
+    } catch (error) {
+      console.error("❌ Error unsaving tweet:", error);
+    }
+  };
+
   return (
     <div className="tweet">
       {/* If this is a retweet, show who retweeted it */}
       {isRetweet && (
-        <p className="retweet-info">🔄 Retweeted by @{tweet.retweetedBy?.username}</p>
+        <p className="retweet-info">
+          🔄 Retweeted by @{tweet.retweetedBy?.username} ·{" "}
+          {formatTimestamp(tweet.createdAt)}
+        </p>
       )}
 
       {/* If it's a retweet with additional comment, display it */}
-      {isRetweet && tweet.text && <p className="retweet-text">🗣️ {tweet.text}</p>}
+      {isRetweet && tweet.text && (
+        <p className="retweet-text">🗣️ {tweet.text}</p>
+      )}
 
       {/* Main Tweet Content (for original tweets) */}
       {!isRetweet && (
         <div className="tweet-content">
-          <h3 className="username">@{tweet.userId?.username}</h3>
+          <h3 className="username">
+            @{tweet.userId?.username} · {formatTimestamp(tweet.createdAt)}
+          </h3>
           <p>{tweet.text}</p>
 
           {/* Show media if available */}
           {tweet.media && tweet.media.url && (
             <div className="tweet-media">
               {tweet.media.type === "image" ? (
-                <img src={tweet.media.url} alt="Tweet Media" className="tweet-image" />
+                <img
+                  src={tweet.media.url}
+                  alt="Tweet Media"
+                  className="tweet-image"
+                />
               ) : (
                 <video src={tweet.media.url} controls className="tweet-video" />
               )}
@@ -102,16 +146,27 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
       {/* ✅ If this is a retweet, display the original tweet below it with like/retweet buttons */}
       {isRetweet && (
         <div className="original-tweet">
-          <h3 className="username">@{tweet.originalTweet.userId?.username}</h3>
+          <h3 className="username">
+            @{tweet.originalTweet.userId?.username} ·{" "}
+            {formatTimestamp(tweet.originalTweet.createdAt)}
+          </h3>
           <p>{tweet.originalTweet.text}</p>
 
           {/* Show media from the original tweet if available */}
           {tweet.originalTweet.media && tweet.originalTweet.media.url && (
             <div className="tweet-media">
               {tweet.originalTweet.media.type === "image" ? (
-                <img src={tweet.originalTweet.media.url} alt="Tweet Media" className="tweet-image" />
+                <img
+                  src={tweet.originalTweet.media.url}
+                  alt="Tweet Media"
+                  className="tweet-image"
+                />
               ) : (
-                <video src={tweet.originalTweet.media.url} controls className="tweet-video" />
+                <video
+                  src={tweet.originalTweet.media.url}
+                  controls
+                  className="tweet-video"
+                />
               )}
             </div>
           )}
@@ -119,17 +174,32 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
           {/* ✅ Like & Retweet buttons for the original tweet */}
           <div className="tweet-actions">
             <button onClick={handleLike}>
-              {hasLiked ? "💔 Unlike" : "❤️ Like"} {tweetToInteractWith.likes.length}
+              {hasLiked ? "💔 Unlike" : "❤️ Like"}{" "}
+              {tweetToInteractWith.likes.length}
             </button>
-            
+
             {/* ✅ If the user has retweeted, show "Undo Retweet" */}
             {hasRetweeted ? (
-              <button onClick={handleUndoRetweet}>❌ Undo Retweet {tweetToInteractWith.retweets.length}</button>
+              <button onClick={handleUndoRetweet}>
+                ❌ Undo Retweet {tweetToInteractWith.retweets.length}
+              </button>
             ) : (
               <button onClick={() => setShowRetweetInput(!showRetweetInput)}>
                 🔄 Retweet {tweetToInteractWith.retweets.length}
               </button>
             )}
+            {isSaved ? (
+              <button onClick={handleUnsaveTweet}>❌ Unsave</button>
+            ) : (
+              <button onClick={handleSaveTweet}>💾 Save</button>
+            )}
+            <div className="tweet-actions">
+              <button onClick={() => setShowComments(!showComments)}>
+                💬 Comment
+              </button>
+            </div>
+
+           
           </div>
         </div>
       )}
@@ -138,14 +208,22 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
       {!isRetweet && (
         <div className="tweet-actions">
           <button onClick={handleLike}>
-            {hasLiked ? "💔 Unlike" : "❤️ Like"} {tweetToInteractWith.likes.length}
+            {hasLiked ? "💔 Unlike" : "❤️ Like"}{" "}
+            {tweetToInteractWith.likes.length}
           </button>
           {hasRetweeted ? (
-            <button onClick={handleUndoRetweet}>❌ Undo Retweet {tweetToInteractWith.retweets.length}</button>
+            <button onClick={handleUndoRetweet}>
+              ❌ Undo Retweet {tweetToInteractWith.retweets.length}
+            </button>
           ) : (
             <button onClick={() => setShowRetweetInput(!showRetweetInput)}>
               🔄 Retweet {tweetToInteractWith.retweets.length}
             </button>
+          )}
+          {isSaved ? (
+            <button onClick={handleUnsaveTweet}>❌ Unsave</button>
+          ) : (
+            <button onClick={handleSaveTweet}>💾 Save</button>
           )}
         </div>
       )}
@@ -161,6 +239,9 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
           <button onClick={handleRetweet}>Confirm Retweet</button>
         </div>
       )}
+       {showComments && (
+              <CommentSection tweetId={tweet._id} loggedInUser={loggedInUser} />
+            )}
     </div>
   );
 };
