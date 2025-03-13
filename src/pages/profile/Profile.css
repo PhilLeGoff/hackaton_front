@@ -132,10 +132,13 @@ h2 {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  width: 50vw;
+  width: 90%;
   max-width: 1000px;
-  font-size: 0.9rem;
-  color: #333;
+  font-size: 0.85rem;
+  color: rgb(69, 68, 68);
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
 }
 
 .profile-form textarea {

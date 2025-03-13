@@ -94,7 +94,7 @@ export default function UserProfile() {
               ))}
             </ul>
           ) : (
-            <p>Aucun ami ajouté pour le moment.</p>
+            <p>Aucun ami ajouté pour le moment</p>
           )}
         </div>
       </div>
