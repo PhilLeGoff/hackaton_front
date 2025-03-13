@@ -23,11 +23,11 @@ const Accueil = () => {
       try {
         const user = localStorage.getItem("user");
         if (user) {
-          console.log("📥 Utilisateur connecté trouvé");
+          console.log("Utilisateur connecté trouvé");
           setLoggedInUser(JSON.parse(user));
         }
       } catch (error) {
-        console.error("😢 Erreur lors de la récupération de l'utilisateur :", error);
+        console.error("Erreur lors de la récupération de l'utilisateur :", error);
       }
     };
 
@@ -48,10 +48,10 @@ const Accueil = () => {
         videoRef.current.srcObject = stream;
       }
       setCameraPermission(true);
-      console.log("✅ Caméra activée");
+      console.log("Caméra activée");
     } catch (error) {
       setCameraPermission(false);
-      console.error("❌ Autorisation de la caméra refusée :", error);
+      console.error(" Autorisation de la caméra refusée :", error);
     }
   };
 
@@ -59,7 +59,7 @@ const Accueil = () => {
     if (videoRef.current && videoRef.current.srcObject) {
       const tracks = videoRef.current.srcObject.getTracks();
       tracks.forEach((track) => track.stop());
-      console.log("📴 Caméra arrêtée");
+      console.log(" Caméra arrêtée");
     }
   };
 
@@ -90,7 +90,7 @@ const Accueil = () => {
         setDetectedEmotion(data.emotion); // ✅ Mettre à jour l’émotion détectée
 
       } catch (error) {
-        console.error("❌ Erreur lors de l'analyse :", error);
+        console.error(" Erreur lors de l'analyse :", error);
       }
     }, "image/jpeg");
   };
@@ -101,20 +101,20 @@ const Accueil = () => {
 
     try {
       const data = await TweetService.getTweets(page, 10);
-      console.log("📥 Tweets récupérés :", data);
+      console.log("Tweets récupérés :", data);
 
       setTweets((prevTweets) => [...prevTweets, ...data.tweets]);
       setPage(page + 1);
       setHasMore(data.hasMore);
     } catch (error) {
-      console.error("😢 Erreur lors de la récupération des tweets :", error);
+      console.error("Erreur lors de la récupération des tweets :", error);
     } finally {
       setLoading(false);
     }
   };
 
   const refreshFeed = async () => {
-    console.log("🔄 Rafraîchissement du fil d'actualité...");
+    console.log(" Rafraîchissement du fil d'actualité...");
 
     setPage(1);
     setHasMore(true);
@@ -126,13 +126,13 @@ const Accueil = () => {
       if (updatedUser) {
         localStorage.setItem("user", JSON.stringify(updatedUser));
         setLoggedInUser(updatedUser);
-        console.log("✅ Informations utilisateur mises à jour");
+        console.log(" Informations utilisateur mises à jour");
       }
 
       const data = await TweetService.getTweets(1, 10);
       setTweets(data.tweets);
     } catch (error) {
-      console.error("❌ Erreur lors du rafraîchissement :", error);
+      console.error("Erreur lors du rafraîchissement :", error);
     } finally {
       setLoading(false);
     }
@@ -143,22 +143,22 @@ const Accueil = () => {
       <div className="glass-overlay"></div>
       <div className="homepage-container">
         
-        {/* ✅ Affichage de la caméra */}
+        {/* Affichage de la caméra */}
         <div className="camera-container">
           <video ref={videoRef} autoPlay playsInline className="camera-feed"></video>
         </div>
 
-        {/* ✅ Affichage de l'émotion détectée */}
+        {/*  Affichage de l'émotion détectée */}
         {detectedEmotion && (
-          <p className="emotion-result">🧠 Émotion détectée : {detectedEmotion}</p>
+          <p className="emotion-result"> Émotion détectée : {detectedEmotion}</p>
         )}
 
-        {/* ✅ Bouton pour analyser l'émotion */}
+        {/*  Bouton pour analyser l'émotion */}
         <button className="analyze-btn" onClick={captureAndAnalyze}>
           Analyser l'émotion
         </button>
 
-        {/* ✅ Message si la caméra est bloquée */}
+        {/* Message si la caméra est bloquée */}
         {cameraPermission === false && (
           <p className="error-message">⚠️ Accès caméra refusé. Activez-le dans les paramètres du navigateur.</p>
         )}
@@ -172,7 +172,7 @@ const Accueil = () => {
             <Tweet key={i} tweet={tweet} loggedInUser={loggedInUser} onInteraction={refreshFeed} />
           ))}
 
-          {loading && <p>⏳ Chargement des tweets...</p>}
+          {loading && <p> Chargement des tweets...</p>}
 
           {!loading && hasMore && (
             <button className="load-more" onClick={loadTweets}>Charger plus...</button>
