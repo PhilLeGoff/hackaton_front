@@ -39,16 +39,16 @@ const CommentSection = ({ tweetId, loggedInUser }) => {
       <div className="comment-input">
         <textarea
         style={{width: "95%", alignSelf: "center"}}
-          placeholder="Write a comment..."
+          placeholder="Écrire un commentaire..."
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
         />
-        <button  style={{width: "100%", alignSelf: "center"}} onClick={handleAddComment}>Post Comment</button>
+        <button  style={{width: "100%", alignSelf: "center"}} onClick={handleAddComment}>Publier le commentaire</button>
       </div>
 
       <ul className="comments-list">
         {comments.length === 0 ? (
-          <p className="no-comments">No comments yet. Be the first to comment!</p>
+          <p className="no-comments">Aucun commentaire pour l’instant. Soyez le premier à commenter !</p>
         ) : (
           comments.map((comment) => (
             <li

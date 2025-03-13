@@ -210,7 +210,7 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
           </button>
         )}
         {isSaved ? (
-          <button onClick={handleUnsaveTweet}>❌ Annuler sauvegarde</button>
+          <button onClick={handleUnsaveTweet}>❌ Retirer</button>
         ) : (
           <button onClick={handleSaveTweet}>💾 Sauvegarder</button>
         )}
