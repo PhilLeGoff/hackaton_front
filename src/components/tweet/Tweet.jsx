@@ -3,6 +3,7 @@ import TweetService from "../../services/TweetService";
 import "./Tweet.css";
 import formatTimestamp from "../../hooks/formatTimeStamp";
 import CommentSection from "../commentSection.js/CommentSection";
+// import séocket from "../../utils/socket";
 
 const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
   // Determine if it's a retweet & select the correct tweet to interact with
@@ -39,6 +40,7 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
   const handleLike = async () => {
     try {
       await TweetService.likeTweet(tweetToInteractWith._id);
+      // socket.emit("like_téweet", { user: loggedInUser.username, tweetId: tweet._id });
       setHasLiked(!hasLiked);
       setLikes(hasLiked ? likes - 1 : likes + 1);
 
