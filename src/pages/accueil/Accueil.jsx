@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import TweetService from "../../services/TweetService";
+import AuthService from "../../services/AuthService"; // ✅ Import AuthService
 import Tweet from "../../components/tweet/Tweet"; // Tweet component
 import TweetPost from "../../components/tweetpost/TweetPost"; // New Tweet Post component
 import Trends from "../../components/cards/trends/Trends.jsx";
 import Suggestions from "../../components/cards/suggestions/suggestions.jsx";
 import "./Accueil.css";
+import UserService from "../../services/UserService.js";
 
 const Accueil = () => {
   const [tweets, setTweets] = useState([]);
-  const [loggedInUser, setLoggedInUser] = useState(null); // ✅ Store logged-in user
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -19,8 +21,8 @@ const Accueil = () => {
       try {
         const user = localStorage.getItem("user");
         if (user) {
-          console.log("loged in user")
-          setLoggedInUser(JSON.parse(user)); // ✅ Parse JSON string
+          console.log("📥 Logged in user found");
+          setLoggedInUser(JSON.parse(user));
         }
       } catch (error) {
         console.error("😢 Erreur lors de la récupération de l'utilisateur :", error);
@@ -49,20 +51,30 @@ const Accueil = () => {
     }
   };
 
-  // ✅ Reload tweets when a new tweet is posted or interacted with (Like/Retweet)
+  // ✅ Refresh feed & fetch updated user info
   const refreshFeed = async () => {
     console.log("🔄 Rafraîchissement du fil après interaction...");
 
     setPage(1);
     setHasMore(true);
-    setLoading(true); // Prevent duplicate calls
+    setLoading(true);
 
     try {
-      const data = await TweetService.getTweets(1, 10); // Fetch fresh tweets
-      console.log("✅ Emotes mis à jour");
-      setTweets(data.tweets); // 🔥 Replace old tweets instead of appending
+      // 🔥 Fetch updated user info
+      const updatedUser = await UserService.getUserProfile();
+      
+      if (updatedUser) {
+        // 🔥 Store updated user in localStorage
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        setLoggedInUser(updatedUser);
+        console.log("✅ Updated user info saved to localStorage");
+      }
+
+      // 🔥 Fetch fresh tweets
+      const data = await TweetService.getTweets(1, 10);
+      setTweets(data.tweets);
     } catch (error) {
-      console.error("😢 Erreur lors du rafraîchissement des Emotes :", error);
+      console.error("❌ Error refreshing feed:", error);
     } finally {
       setLoading(false);
     }
@@ -76,6 +88,7 @@ const Accueil = () => {
           {loggedInUser && <TweetPost onTweetPosted={refreshFeed} />}{" "}
           {/* ✅ Post Component */}
         </div>
+
         <div className="posts-container">
           {tweets.map((tweet, i) => (
             <Tweet
@@ -94,9 +107,11 @@ const Accueil = () => {
             </button>
           )}
         </div>
+
         <div className="trends-container">
           <Trends />
         </div>
+
         <div className="sugg-container">
           <Suggestions />
         </div>

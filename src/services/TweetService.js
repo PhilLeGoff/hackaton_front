@@ -22,6 +22,7 @@ const TweetService = {
         formData.append("media", media);
       }
 
+      console.log(getAuthHeaders())
       const response = await axios.post(`${API_BASE_URL}/`, formData, {
         headers: { 
           ...getAuthHeaders(),
@@ -132,6 +133,59 @@ const TweetService = {
       console.error("❌ Error deleting tweet:", error);
       throw new Error("Failed to delete the tweet");
     }
+  },
+
+  /**
+   * Save a tweet
+   */
+  saveTweet: async (tweetId) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/${tweetId}/save`, {}, {
+        headers: getAuthHeaders(),
+      });
+      return response.data;
+    } catch (error) {
+      console.error("❌ Error saving tweet:", error);
+      throw new Error("Failed to save the tweet");
+    }
+  },
+
+  /**
+   * Unsave a tweet
+   */
+  unsaveTweet: async (tweetId) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/${tweetId}/unsave`, {}, {
+        headers: getAuthHeaders(),
+      });
+      return response.data;
+    } catch (error) {
+      console.error("❌ Error unsaving tweet:", error);
+      throw new Error("Failed to unsave the tweet");
+    }
+  },
+
+  /**
+   * Get user's saved tweets
+   */
+  getSavedTweets: async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/saved`, {
+        headers: getAuthHeaders(),
+      });
+      return response.data;
+    } catch (error) {
+      console.error("❌ Error fetching saved tweets:", error);
+      throw new Error("Failed to fetch saved tweets");
+    }
+  },
+  
+  addComment: async (tweetId, text) => {
+    return await axios.post(`${API_BASE_URL}/${tweetId}/comment`, { text }, { headers: getAuthHeaders() });
+  },
+  
+  getComments: async (tweetId) => {
+    return await axios.get(`${API_BASE_URL}/${tweetId}/comments`, { headers: getAuthHeaders() });
   },
 };
 
