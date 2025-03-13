@@ -5,10 +5,11 @@ import Tweet from "../../components/tweet/Tweet";
 import TweetPost from "../../components/tweetpost/TweetPost";
 import Trends from "../../components/cards/trends/Trends.jsx";
 import Suggestions from "../../components/cards/suggestions/suggestions.jsx";
+import Header from "../../components/header/Header"; // ✅ Import Header
 import "./Accueil.css";
 
 const Accueil = () => {
-  const [tweets, setTweets] = useState([]);
+  const [tweets, setTweets] = useState([]); // ✅ Tweets state passed from Header
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -31,9 +32,7 @@ const Accueil = () => {
     };
 
     fetchUserFromLocalStorage();
-    loadTweets();
-
-    // ✅ Activate camera
+    if (tweets.length === 0) loadTweets();
     requestCameraPermission();
 
     return () => {
@@ -41,7 +40,7 @@ const Accueil = () => {
     };
   }, []);
 
-  // ✅ Function to request camera permission
+  // ✅ Request camera permission
   const requestCameraPermission = async () => {
     try {
       console.log("🎥 Requesting camera permission...");
@@ -57,7 +56,7 @@ const Accueil = () => {
     }
   };
 
-  // ✅ Function to stop the camera when component unmounts
+  // ✅ Stop camera when component unmounts
   const stopCamera = () => {
     if (videoRef.current && videoRef.current.srcObject) {
       const tracks = videoRef.current.srcObject.getTracks();
@@ -66,6 +65,7 @@ const Accueil = () => {
     }
   };
 
+  // ✅ Load initial tweets if no search is performed
   const loadTweets = async () => {
     if (loading || !hasMore) return;
     setLoading(true);
@@ -74,7 +74,7 @@ const Accueil = () => {
       const data = await TweetService.getTweets(page, 10);
       console.log("📥 Tweets fetched:", data);
 
-      setTweets((prevTweets) => [...prevTweets, ...data.tweets]); // Append new tweets
+      setTweets((prevTweets) => [...prevTweets, ...data.tweets]);
       setPage(page + 1);
       setHasMore(data.hasMore);
     } catch (error) {
@@ -84,6 +84,7 @@ const Accueil = () => {
     }
   };
 
+  // ✅ Refresh feed & update user info
   const refreshFeed = async () => {
     console.log("🔄 Refreshing feed...");
 
@@ -110,45 +111,50 @@ const Accueil = () => {
   };
 
   return (
-    <main className="main-content">
-      <div className="glass-overlay"></div>
-      <div className="homepage-container">
-        
-        {/* ✅ Display camera feed */}
-        <div className="camera-container">
-          <video ref={videoRef} autoPlay playsInline className="camera-feed"></video>
-        </div>
+    <>
+      {/* ✅ Header now handles tweet searching */}
+      <Header setTweets={setTweets} />
 
-        {/* ✅ If permission is denied, show message */}
-        {cameraPermission === false && (
-          <p className="error-message">⚠️ Camera access denied. Please enable it in browser settings.</p>
-        )}
+      <main className="main-content">
+        <div className="glass-overlay"></div>
+        <div className="homepage-container">
 
-        <div className="tweet-container">
-          {loggedInUser && <TweetPost onTweetPosted={refreshFeed} />}
-        </div>
+          {/* ✅ Display camera feed */}
+          <div className="camera-container">
+            <video ref={videoRef} autoPlay playsInline className="camera-feed"></video>
+          </div>
 
-        <div className="posts-container">
-          {tweets.map((tweet, i) => (
-            <Tweet key={i} tweet={tweet} loggedInUser={loggedInUser} onInteraction={refreshFeed} />
-          ))}
-
-          {loading && <p>⏳ Loading tweets...</p>}
-
-          {!loading && hasMore && (
-            <button className="load-more" onClick={loadTweets}>Load More...</button>
+          {/* ✅ If permission is denied, show message */}
+          {cameraPermission === false && (
+            <p className="error-message">⚠️ Camera access denied. Please enable it in browser settings.</p>
           )}
-        </div>
 
-        <div className="trends-container">
-          <Trends />
-        </div>
+          <div className="tweet-container">
+            {loggedInUser && <TweetPost onTweetPosted={refreshFeed} />}
+          </div>
 
-        <div className="sugg-container">
-          <Suggestions />
+          <div className="posts-container">
+            {tweets.map((tweet, i) => (
+              <Tweet key={i} tweet={tweet} loggedInUser={loggedInUser} onInteraction={refreshFeed} />
+            ))}
+
+            {loading && <p>⏳ Loading tweets...</p>}
+
+            {!loading && hasMore && (
+              <button className="load-more" onClick={loadTweets}>Load More...</button>
+            )}
+          </div>
+
+          <div className="trends-container">
+            <Trends />
+          </div>
+
+          <div className="sugg-container">
+            <Suggestions />
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 };
 

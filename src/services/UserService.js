@@ -125,6 +125,7 @@ const UserService = {
    */
   unfollowUser: async (userId) => {
     try {
+      console.log("unfollowing")
       const response = await axios.post(`${API_BASE_URL}/${userId}/unfollow`, {}, {
         headers: getAuthHeaders(),
       });
@@ -177,6 +178,36 @@ const UserService = {
     } catch (error) {
       console.error("❌ Error fetching saved tweets:", error);
       throw new Error("Failed to fetch saved tweets");
+    }
+  },
+
+  /**
+   * Get followers
+   */
+  getFollowers: async (id) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/followers/${id}`, {
+        headers: getAuthHeaders(),
+      });
+      return response.data;
+    } catch (error) {
+      console.error("❌ Error fetching followers:", error);
+      throw new Error("Failed to fetch followers");
+    }
+  },
+
+  /**
+   * Get following
+   */
+  getFollowing: async (id) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/following/${id}`, {
+        headers: getAuthHeaders(),
+      });
+      return response.data;
+    } catch (error) {
+      console.error("❌ Error fetching followers:", error);
+      throw new Error("Failed to fetch followers");
     }
   },
 };

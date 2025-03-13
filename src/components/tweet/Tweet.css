@@ -63,6 +63,7 @@
 /* 🔹 Tweet Actions */
 .tweet-actions {
   display: flex;
+  justify-content: end;
   gap: 15px;
   margin-top: 10px;
 }
@@ -182,5 +183,9 @@ button.retweeted {
   display: flex;
   gap: 10px;
   align-items: center;
-  justify-content: start;
+  justify-content: space-between;
+}
+
+.delete-tweet {
+  justify-self: end;
 }
