@@ -1,4 +1,5 @@
-import React from "react";
+
+export default LogoutButton;
 import './Header.css';
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/AuthService";

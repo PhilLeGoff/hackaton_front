@@ -1,3 +1,4 @@
+export default Accueil;
 import React, { useState, useEffect, useRef } from "react";
 import TweetService from "../../services/TweetService";
 import UserService from "../../services/UserService.js";
