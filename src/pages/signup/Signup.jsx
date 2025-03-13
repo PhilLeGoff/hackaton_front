@@ -67,19 +67,23 @@ const Signup = () => {
 
   return (
     <div className="login-container">
+      <div className="glass-overlay"></div>
       {/* Left Side Branding */}
       <div className="login-left">
+      <div className="logo">
+        <img src="https://i.imgur.com/iV5PR2K.png" alt="EmoTwitt Logo" className="logo-image" />
+      </div>
         <h1 className="login-logo">EmoTwitt</h1>
       </div>
 
       {/* Signup Form */}
       <div className="login-right">
-        <h2>Create your EmoTwitt account</h2>
+        <h2>Créer votre compte EmoTwitt</h2>
         <form onSubmit={handleSubmit} encType="multipart/form-data" className="login-form">
           <input
             type="text"
             name="username"
-            placeholder="Username"
+            placeholder="👤 Nom d'utilisateur"
             value={formData.username}
             onChange={handleChange}
             className="login-input"
@@ -88,7 +92,7 @@ const Signup = () => {
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder="📧 Email"
             value={formData.email}
             onChange={handleChange}
             className="login-input"
@@ -97,7 +101,7 @@ const Signup = () => {
           <input
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder="🔑 Mot de passe"
             value={formData.password}
             onChange={handleChange}
             className="login-input"
@@ -106,27 +110,30 @@ const Signup = () => {
           <input
             type="password"
             name="confirmPassword"
-            placeholder="Confirm Password"
+            placeholder="🔄 Confirmez le mot de passe"
             value={formData.confirmPassword}
             onChange={handleChange}
             className="login-input"
             required
           />
+          
           <label className="file-input-label">
-            Upload Avatar (Optional)
+            📸 Télécharger un avatar
+
             <input type="file" name="avatar" accept="image/*" onChange={handleFileChange} />
           </label>
           <button type="submit" className="login-button" disabled={loading}>
-            {loading ? "Signing up..." : "Sign up"}
+            {loading ? "⏳ Inscription en cours..." : "S'inscrire"}
           </button>
         </form>
+
 
         {/* 🔥 Error Message Display */}
         {errorMessage && <p className="login-message">{errorMessage}</p>}
 
-        {/* Links */}
+        {/* Liens supplémentaires */}
         <p>
-          <Link to="/login" className="login-link">Already have an account? Log in</Link>
+          <Link to="/login" className="login-link"> Vous avez déjà un compte ? Connectez-vous</Link>
         </p>
       </div>
     </div>

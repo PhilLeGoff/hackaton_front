@@ -6,9 +6,11 @@ import "./App.css";
 
 export default function App() {
   return (
+    
     <BrowserRouter>
       <ToastContainer /> {/* ✅ Ensures toast notifications appear */}
       <AppRoutes />
     </BrowserRouter>
+   
   );
 }

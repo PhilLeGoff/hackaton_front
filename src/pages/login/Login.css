@@ -4,7 +4,7 @@
   height: 100vh; 
   align-items: center;
   justify-content: center;
-  background-color: #f5f8fa;
+  background-color: #fff;
 }
 
 .login-left {
@@ -13,13 +13,21 @@
   align-items: center;
   justify-content: center;
   background-color: #008080;
+  padding-bottom: 40px;
+  padding-right: 10px;
   color: #fff;
   height: 100%;
   width: 10%;
 }
 
+.logo-image {
+  width: 85px; /* Adjust the size as needed */
+  height: auto;
+  border-radius: 8px; /* Optional: Add rounded corners */
+}
+
 .login-logo {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   font-weight: bold;
 }
 
@@ -29,31 +37,54 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 500px;
-  padding: 40px;
+  max-width: 520px;
+  padding: 50px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   height: 100%;
 }
 
+.login-right h2 {
+  font-size: 1.5rem;
+  color: #008080;
+}
+
 .login-form {
   width: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
   gap: 10px;
 }
 
 .login-input {
-  width: 100%;
+  width: 70%;
   padding: 12px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  font-size: 14px;
+  border: 2px solid #f1f1f1;;
+  border-radius: 25px;
+  margin-top: 5px;
+}
+
+.login-overlay {
+  position: absolute; /* Ensures it stays on top of your content */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1); /* Translucent black background */
+  backdrop-filter: blur(0.2px); /* Frosted glass effect */
+  -webkit-backdrop-filter: blur(0px) saturate(130%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1; /* Set it behind the content, so you can interact with the page */
+  pointer-events: none; /* This allows clicks to pass through the overlay */
 }
 
 .file-input-label {
-  width: 100%;
+  width: 70%;
   text-align: center;
   background-color: #f1f1f1;
   border: 1px solid #ddd;
@@ -67,13 +98,16 @@
 }
 
 .login-button {
-  background-color: #FF6B6B;
+  background-color: #FF85A1;
   color: #fff;
   padding: 12px;
   font-size: 16px;
-  border: none;
-  border-radius: 5px;
+  width: 35%;
+  margin-top: 10px;
+  border: 2px solid #f1f1f1;
+  border-radius: 25px;
   cursor: pointer;
+  align-items: center;
 }
 
 .login-button:disabled {

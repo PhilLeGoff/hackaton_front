@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Signup from "../pages/signup/Signup";
 import Login from "../pages/login/Login";
 import Accueil from "../pages/accueil/Accueil";
+import UserProfile from "../pages/profile/Profile";
 import AuthService from "../services/AuthService";
 import Layout from "../layout/Layout";
 
@@ -10,7 +11,6 @@ export default function AppRoutes() {
   const [isAuthenticated, setIsAuthenticated] = useState(AuthService.getToken() !== null);
   const location = useLocation();
 
-  // Re-check authentication when the route changes
   useEffect(() => {
     setIsAuthenticated(AuthService.getToken() !== null);
   }, [location]);
@@ -27,7 +27,7 @@ export default function AppRoutes() {
         // ✅ This Layout wraps the pages, keeping Header/Footer fixed
         <Route path="/" element={<Layout />}>
           <Route index element={<Accueil />} /> 
-          <Route path="profile" element={<div>Profile Page</div>} /> 
+          <Route path="profile" element={<UserProfile />} /> 
           <Route path="explore" element={<div>Explore Page</div>} /> 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

@@ -4,7 +4,7 @@ import React from 'react';
 const Trends = () => {
   return (
     <div className="trends">
-      <h2>Trending</h2>
+      <h2>📈 Tendances</h2>
       <ul>
         <li>#MERN</li>
         <li>#ReactJS</li>

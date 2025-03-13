@@ -34,18 +34,19 @@ const Header = () => {
 
   return (
     <header className="header">
-      {/* Logo Section */}
+      <div className="header-overlay"></div>
       <div className="logo">
-        <h1 onClick={() => navigate("/")} className="clickable-logo">EmoTwitt</h1>
-      </div>
-
-      {/* Search Section */}
+        <div>
+        <img src="https://i.imgur.com/iV5PR2K.png" alt="EmoTwitt Logo" className="logo-header" />
+        </div>
+        <h1>EmoTwitt</h1>
+      </div> 
       <div className="search-section">
         <form onSubmit={handleSearchSubmit} className="search-form">
           <div className="search-container">
             <input
               type="text"
-              placeholder="Search EmoTwitt..."
+              placeholder="Rechercher Emotes..."
               value={searchQuery}
               onChange={handleSearchChange}
               className="search-input"

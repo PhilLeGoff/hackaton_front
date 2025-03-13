@@ -1,20 +1,17 @@
-/* 🔹 General Tweet Styling */
 .tweet {
   background-color: #fff;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-  width: 100%;
   max-width: 600px;
   position: relative;
-  display: flex;
-  flex-direction: column;
+  width: 72vw;
+  max-width: 1100px;
 }
 
-/* 🔹 Username Styling */
 .username {
-  color: #1DA1F2;
+  color: teal;
   font-weight: bold;
   font-size: 18px;
   margin-bottom: 5px;
@@ -34,15 +31,32 @@
   text-align: center;
 }
 
-.tweet-image,
+.tweet-image{
+  width: 100%;
+  max-width: 500px;
+  max-width: 500px;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+
 .tweet-video {
   width: 100%;
   max-width: 500px;
+  max-width: 700px;
   border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  
 }
 
 .tweet-video {
-  display: block;
+  
+  align-items: center;
+  align-content: center;
+  justify-content: center;
 }
 
 /* 🔹 Tweet Actions */
@@ -82,8 +96,8 @@ button:hover {
 
 /* 🔹 Original Tweet Inside a Retweet */
 .original-tweet {
-  background-color: #F5F8FA;
-  border-left: 4px solid #1DA1F2;
+  background: linear-gradient(135deg, #fafafa, #f0f0f0);
+  border-left: 4px solid teal;
   padding: 10px;
   margin-top: 10px;
   border-radius: 10px;
@@ -116,7 +130,7 @@ button:hover {
 }
 
 .retweet-input button {
-  background-color: #1DA1F2;
+  background-color: teal;
   color: white;
   border-radius: 8px;
   padding: 5px 10px;
@@ -130,21 +144,25 @@ button:hover {
 
 /* 🔹 Like & Retweet Active State */
 button.liked {
-  color: red;
+  color: #FF85A1;
 }
 
 button.retweeted {
-  color: #1DA1F2;
+  color: teal;
 }
 
 /* 🔹 Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
   .tweet {
-    max-width: 100%;
+    max-width: 100vw;
   }
 
   .tweet-image,
   .tweet-video {
-    max-width: 100%;
+    max-width: 100vw;
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    align-items: center;
   }
 }

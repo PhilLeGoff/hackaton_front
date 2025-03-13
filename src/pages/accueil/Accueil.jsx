@@ -25,7 +25,7 @@ const Accueil = () => {
           setLoggedInUser(JSON.parse(user));
         }
       } catch (error) {
-        console.error("❌ Error fetching user from localStorage:", error);
+        console.error("😢 Erreur lors de la récupération de l'utilisateur :", error);
       }
     };
 
@@ -39,13 +39,13 @@ const Accueil = () => {
 
     try {
       const data = await TweetService.getTweets(page, 10);
-      console.log("📥 Tweets Fetched:", data);
+      console.log("📥 Emotes récupérés :", data);
 
       setTweets((prevTweets) => [...prevTweets, ...data.tweets]); // Append new tweets
       setPage(page + 1);
       setHasMore(data.hasMore);
     } catch (error) {
-      console.error("❌ Error fetching tweets:", error);
+      console.error(" 😢 Erreur lors de la récupération des imotes:", error);
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,7 @@ const Accueil = () => {
 
   // ✅ Refresh feed & fetch updated user info
   const refreshFeed = async () => {
-    console.log("🔄 Refreshing feed & fetching user data...");
+    console.log("🔄 Rafraîchissement du fil après interaction...");
 
     setPage(1);
     setHasMore(true);
@@ -82,9 +82,13 @@ const Accueil = () => {
 
   return (
     <main className="main-content">
+      <div className="glass-overlay"></div>
       <div className="homepage-container">
-        {loggedInUser && <TweetPost onTweetPosted={refreshFeed} />} {/* ✅ Post Component */}
-        
+        <div className="tweet-container">
+          {loggedInUser && <TweetPost onTweetPosted={refreshFeed} />}{" "}
+          {/* ✅ Post Component */}
+        </div>
+
         <div className="posts-container">
           {tweets.map((tweet, i) => (
             <Tweet
@@ -95,11 +99,11 @@ const Accueil = () => {
             />
           ))}
 
-          {loading && <p>Loading more tweets...</p>}
+          {loading && <p>⏳ Chargement des Emotes...</p>}
 
           {!loading && hasMore && (
             <button className="load-more" onClick={loadTweets}>
-              Load More Tweets
+              Charger plus...
             </button>
           )}
         </div>
