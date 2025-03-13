@@ -10,19 +10,17 @@ export const NotificationProvider = ({ children, user }) => {
   const socketRef = useRef(null); // ✅ Keep socket instance across renders
 
   useEffect(() => {
-    if (user) {
-      // ✅ Initialize socket only once
+    if (user && user._id) { // ✅ Ensure user._id exists before connecting
       if (!socketRef.current) {
         socketRef.current = io(import.meta.env.VITE_API_URL, {
           transports: ["websocket"],
         });
 
+        // 🔥 Send the user ID after connection
         socketRef.current.emit("user_connected", user._id);
 
         socketRef.current.on("notification", (notification) => {
           setNotifications((prev) => [...prev, notification]);
-
-          // ✅ Show toast notification
           showNotification(notification);
         });
       }
@@ -39,6 +37,7 @@ export const NotificationProvider = ({ children, user }) => {
   const showNotification = (notification) => {
     const { type, tweetId } = notification;
 
+    console.log("toasting")
     if (type === "like") {
       toast.info("💙 Your emote was liked!", { position: "top-right", autoClose: 3000 });
     } else if (type === "retweet") {
@@ -47,6 +46,10 @@ export const NotificationProvider = ({ children, user }) => {
       toast.info("💬 Someone commented on your tweet!", { position: "top-right", autoClose: 3000 });
     } else if (type === "save") {
       toast.info("💬 Someone saved your tweet!", { position: "top-right", autoClose: 3000 });
+    } else if (type === "mentionTweet") {
+      toast.info("💬 Someone mentioned you in their tweet!", { position: "top-right", autoClose: 3000 });
+    } else if (type === "mentionComment") {
+      toast.info("💬 Someone mentioned you in their comment!", { position: "top-right", autoClose: 3000 });
     }
   };
 
