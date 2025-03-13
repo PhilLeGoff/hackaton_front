@@ -1,9 +1,9 @@
 .header {
   background-color: #008080;
   color: white;
-  padding: 10px 20px;
+  padding: 20px 20px;
   width: 100%;
-  height: 52px;
+  height: 80px;
   box-sizing: border-box;
   position: fixed;
   top: 0;
@@ -36,7 +36,7 @@
   display: flex;
   justify-content: right; 
   align-items: center;
-  margin-right: 5px;
+  margin-right: 50px;
 }
 
 .header-overlay {
@@ -64,6 +64,7 @@
 
 .nav-links li {
   display: inline;
+  font-size: larger;
 }
 
 .nav-links a {
@@ -80,8 +81,9 @@
 .logout-button {
   background: none;
   border: none;
+  background-color: rgb(187, 25, 25);
   color: #f1efef; 
-  font-size: 0.95rem; 
+  font-size: large; 
   cursor: pointer;
   text-decoration: none;
   transition: opacity 0.3s;
@@ -110,11 +112,12 @@
 }
 
 .search-input {
-  padding: 5px 10px; 
+  padding: 10px 10px; 
   border: 1px solid #593434;
-  border-radius: 25px; 
+  border-radius: 15px; 
   width: 100%;
-  background-color: #fefefe
+  background-color: #fefefe;
+  border: none;
 }
 
 .search-submit {
@@ -128,6 +131,7 @@
   transform: scaleX(-1);
   padding: 0%;
   color: gray;
+  margin-right: 10px
 }
 
 .search-submit:focus {

@@ -81,8 +81,8 @@ const Header = ({ setTweets }) => {
       <div className="nav-container">
         <nav>
           <ul className="nav-links">
-            <li><a href="/">🏠 Home</a></li>
-            <li><a href="/profile">👤 Profile</a></li>
+            <li><a href="/">Acceuil</a></li>
+            <li><a href="/profile">Profil</a></li>
             <li className="notifications">
               <a href="/notifications">🔔 {notifications.length}</a>
             </li>
