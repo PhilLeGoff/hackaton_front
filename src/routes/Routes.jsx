@@ -27,7 +27,8 @@ export default function AppRoutes() {
         // ✅ This Layout wraps the pages, keeping Header/Footer fixed
         <Route path="/" element={<Layout />}>
           <Route index element={<Accueil />} /> 
-          <Route path="profile" element={<UserProfile />} /> 
+          <Route path="/profile/:userId" element={<UserProfile />} /> 
+          <Route path="/profile" element={<UserProfile />} /> 
           <Route path="explore" element={<div>Explore Page</div>} /> 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
