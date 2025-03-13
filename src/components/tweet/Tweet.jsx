@@ -194,19 +194,19 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
         )}
 
         {isSaved ? (
-          <button onClick={handleUnsaveTweet}>❌ Unsave</button>
+          <button onClick={handleUnsaveTweet}>❌ Retirer</button>
         ) : (
-          <button onClick={handleSaveTweet}>💾 Save</button>
+          <button onClick={handleSaveTweet}>💾 Enregistrer</button>
         )}
 
-        <button onClick={() => setShowComments(!showComments)}>💬 Comment</button>
+        <button onClick={() => setShowComments(!showComments)}>💬 Commentaire</button>
       </div>
 
       {/* Retweet Input */}
       {showRetweetInput && !hasRetweeted && (
         <div className="retweet-input">
           <textarea
-            placeholder="Ajoutez un commentaire à votre retweet..."
+            placeholder="Ajoutez un commentaire à votre repartage..."
             value={retweetText}
             onChange={(e) => setRetweetText(e.target.value)}
           />
