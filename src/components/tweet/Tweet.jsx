@@ -1,5 +1,6 @@
+export default Tweet;
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ Navigation for profile link
+import { useNavigate } from "react-router-dom"; // ✅ Navigation vers le profil
 import TweetService from "../../services/TweetService";
 import "./Tweet.css";
 import formatTimestamp from "../../hooks/formatTimeStamp";
@@ -18,204 +19,242 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
   const [showRetweetInput, setShowRetweetInput] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [showComments, setShowComments] = useState(false);
-  const [isFriend, setIsFriend] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
 
   useEffect(() => {
     if (loggedInUser) {
+      // ✅ Ensure retweeted tweets always get updated like/retweet data
+      const targetTweet = tweetToInteractWith; // This is the tweet being interacted with
+
+      setLikes(targetTweet.likes.length);
+      setRetweets(targetTweet.retweets.length);
+
       setHasLiked(
-        tweetToInteractWith.likes.some(
+        targetTweet.likes.some(
           (like) => like.toString() === loggedInUser._id.toString()
         )
       );
       setHasRetweeted(
-        tweetToInteractWith.retweets.some(
+        targetTweet.retweets.some(
           (retweet) => retweet.toString() === loggedInUser._id.toString()
         )
       );
-      setIsSaved(loggedInUser.savedTweets.includes(tweetToInteractWith._id));
-
-      if (loggedInUser.friends?.includes(tweetToInteractWith.userId?._id)) {
-        setIsFriend(true);
-      }
+      setIsSaved(loggedInUser.savedTweets.includes(targetTweet._id));
     }
-  }, [tweetToInteractWith.likes, tweetToInteractWith.retweets, loggedInUser]);
+  }, [tweetToInteractWith.likes, tweetToInteractWith.retweets, loggedInUser]); // ✅ Depend on latest like/retwee
 
-  // ✅ Handle Like/Unlike
+  // ✅ Gérer le like
   const handleLike = async () => {
     try {
       await TweetService.likeTweet(tweetToInteractWith._id);
       setHasLiked(!hasLiked);
       setLikes(hasLiked ? likes - 1 : likes + 1);
-
       if (onInteraction) onInteraction();
     } catch (error) {
-      console.error("😞 Erreur lors du like:", error);
+      console.error("❌ Erreur lors de l'ajout du like :", error);
     }
   };
 
-  // ✅ Handle Retweet
+  // ✅ Gérer le partage
   const handleRetweet = async () => {
     try {
-      await TweetService.retweet(tweetToInteractWith._id, loggedInUser._id, retweetText);
+      await TweetService.retweet(
+        tweetToInteractWith._id,
+        loggedInUser._id,
+        retweetText
+      );
       setHasRetweeted(true);
       setRetweets(retweets + 1);
       setShowRetweetInput(false);
       setRetweetText("");
-
       if (onInteraction) onInteraction();
     } catch (error) {
-      console.error("😓 Erreur lors du repartage:", error);
+      console.error("❌ Erreur lors du partage :", error);
     }
   };
 
-  // ✅ Handle Undo Retweet
+  // ✅ Annuler le partage
   const handleUndoRetweet = async () => {
     try {
       await TweetService.undoRetweet(tweetToInteractWith._id);
       setHasRetweeted(false);
       setRetweets(retweets - 1);
-
       if (onInteraction) onInteraction();
     } catch (error) {
-      console.error("😣 Erreur lors de l'annulation du repartage :", error);
+      console.error("❌ Erreur lors de l'annulation du partage :", error);
     }
   };
 
-  // ✅ Handle Save Tweet
+  // ✅ Sauvegarder le tweet
   const handleSaveTweet = async () => {
     try {
       await TweetService.saveTweet(tweetToInteractWith._id);
       setIsSaved(true);
       if (onInteraction) onInteraction();
     } catch (error) {
-      console.error("❌ Error saving tweet:", error);
+      console.error("❌ Erreur lors de la sauvegarde :", error);
     }
   };
 
-  // ✅ Handle Unsave Tweet
+  // ✅ Annuler la sauvegarde du tweet
   const handleUnsaveTweet = async () => {
     try {
       await TweetService.unsaveTweet(tweetToInteractWith._id);
       setIsSaved(false);
       if (onInteraction) onInteraction();
     } catch (error) {
-      console.error("❌ Error unsaving tweet:", error);
+      console.error("❌ Erreur lors de l'annulation de la sauvegarde :", error);
+    }
+  };
+
+  // ✅ Supprimer un tweet
+  const handleDeleteTweet = async () => {
+    try {
+      await TweetService.deleteTweet(tweetToInteractWith._id);
+      if (onInteraction) onInteraction();
+      setShowDeletePopup(false);
+    } catch (error) {
+      console.error("❌ Erreur lors de la suppression :", error);
     }
   };
 
   return (
     <div className="tweet">
-      {/* Retweet Info */}
+      {/* Infos de partage */}
       {isRetweet && (
         <p className="retweet-info">
-          <b>↳↴</b> repartagé par <b>@{tweet.retweetedBy?.username}</b>
-          {isFriend && <span className="friend-badge"> 👥 Ami</span>}
+          🔄 Partagé par <b>@{tweet.retweetedBy?.username}</b>
         </p>
       )}
 
-      {/* Retweet with comment */}
-      {isRetweet && tweet.text && <p className="retweet-text">🗣️ {tweet.text}</p>}
-
-      {/* Main Tweet Content */}
-      {!isRetweet && (
-        <div className="tweet-content">
-          <div className="tweet-header">
-            {/* ✅ User Avatar */}
-            <img
-              src={tweet.userId?.avatar || "https://res.cloudinary.com/dizuhubgy/image/upload/v1741862564/twitter-clone/avatars/avatar-1741862564254.png"}
-              alt="Avatar"
-              className="tweet-avatar"
-              onClick={() => navigate(`/profile/${tweet.userId?._id}`)}
-            />
-            <h3 className="username" onClick={() => navigate(`/profile/${tweet.userId?._id}`)}>
-              @{tweet.userId?.username} · {formatTimestamp(tweet.createdAt)}
-              {isFriend && <span className="friend-badge"> 👥 Ami</span>}
-            </h3>
-          </div>
-
-          <p>{tweet.text}</p>
-
-          {tweet.media && tweet.media.url && (
-            <div className="tweet-media">
-              {tweet.media.type === "image" ? (
-                <img src={tweet.media.url} alt="Tweet Media" className="tweet-image" />
-              ) : (
-                <video src={tweet.media.url} controls className="tweet-video" />
-              )}
-            </div>
-          )}
-        </div>
+      {/* Contenu du tweet partagé avec commentaire */}
+      {isRetweet && tweet.text && (
+        <p className="retweet-text">🗣️ {tweet.text}</p>
       )}
 
-      {/* Original Tweet Content (if Retweet) */}
-      {isRetweet && (
-        <div className="original-tweet">
-          <div className="tweet-header">
-            {/* ✅ Retweeted User Avatar */}
-            <img
-              src={tweet.originalTweet.userId?.avatar || "https://res.cloudinary.com/dizuhubgy/image/upload/v1741862564/twitter-clone/avatars/avatar-1741862564254.png"}
-              alt="Avatar"
-              className="tweet-avatar"
-              onClick={() => navigate(`/profile/${tweet.originalTweet.userId?._id}`)}
+      {/* Contenu principal du tweet */}
+      <div
+        className={`${
+          tweet.originalTweet ? "original-tweet" : "tweet-content"
+        }`}
+      >
+        <div className="tweet-header">
+          <div style={{display: "flex", gap: "10px", alignItems: "center"}}>
+
+          <img
+            src={
+              tweetToInteractWith.userId?.avatar ||
+              "https://via.placeholder.com/150"
+            }
+            alt="Avatar"
+            className="tweet-avatar"
+            onClick={() =>
+              navigate(`/profile/${tweetToInteractWith.userId?._id}`)
+            }
             />
-            <h3 className="username" onClick={() => navigate(`/profile/${tweet.originalTweet.userId?._id}`)}>
-              @{tweet.originalTweet.userId?.username} · {formatTimestamp(tweet.originalTweet.createdAt)}
-            </h3>
-          </div>
+          <h3
+            className="username"
+            onClick={() =>
+              navigate(`/profile/${tweetToInteractWith.userId?._id}`)
+            }
+            >
+            @{tweetToInteractWith.userId?.username} ·{" "}
+            {formatTimestamp(tweetToInteractWith.createdAt)}
+          </h3>
 
-          <p>{tweet.originalTweet.text}</p>
-
-          {tweet.originalTweet.media && tweet.originalTweet.media.url && (
-            <div className="tweet-media">
-              {tweet.originalTweet.media.type === "image" ? (
-                <img src={tweet.originalTweet.media.url} alt="Tweet Media" className="tweet-image" />
-              ) : (
-                <video src={tweet.originalTweet.media.url} controls className="tweet-video" />
-              )}
             </div>
-          )}
+          {/* ✅ Bouton de suppression (si l'utilisateur est le propriétaire) */}
+          {loggedInUser &&
+            loggedInUser._id === tweetToInteractWith.userId?._id && (
+              <button
+                className="delete-btn"
+                onClick={() => setShowDeletePopup(true)}
+              >
+                ❌
+              </button>
+            )}
         </div>
-      )}
 
-      {/* Actions: Like, Retweet, Save, Comment, Profile */}
+        <p>{tweetToInteractWith.text}</p>
+
+        {tweetToInteractWith.media && tweetToInteractWith.media.url && (
+          <div className="tweet-media">
+            {tweetToInteractWith.media.type === "image" ? (
+              <img
+                src={tweetToInteractWith.media.url}
+                alt="Tweet Media"
+                className="tweet-image"
+              />
+            ) : (
+              <video
+                src={tweetToInteractWith.media.url}
+                controls
+                className="tweet-video"
+              />
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Actions */}
       <div className="tweet-actions">
         <button onClick={handleLike}>
-          {hasLiked ? "💔 Je n'aime plus" : "🩷 J'aime"} {likes}
+          {hasLiked ? "💔 Je n'aime plus" : "❤️ J'aime"} {likes}
         </button>
-
         {hasRetweeted ? (
           <button onClick={handleUndoRetweet}>
-            😢 Annuler repartage {retweets}
+            ❌ Annuler le partage {retweets}
           </button>
         ) : (
           <button onClick={() => setShowRetweetInput(!showRetweetInput)}>
-            🔄 Repartager {retweets}
+            🔄 Partager {retweets}
           </button>
         )}
-
         {isSaved ? (
-          <button onClick={handleUnsaveTweet}>❌ Unsave</button>
+          <button onClick={handleUnsaveTweet}>❌ Retirer</button>
         ) : (
-          <button onClick={handleSaveTweet}>💾 Save</button>
+          <button onClick={handleSaveTweet}>💾 Sauvegarder</button>
         )}
-
-        <button onClick={() => setShowComments(!showComments)}>💬 Comment</button>
+        <button onClick={() => setShowComments(!showComments)}>
+          💬 Commenter
+        </button>
       </div>
 
-      {/* Retweet Input */}
+      {/* Section de partage */}
       {showRetweetInput && !hasRetweeted && (
         <div className="retweet-input">
           <textarea
-            placeholder="Ajoutez un commentaire à votre retweet..."
+            placeholder="Ajoutez un commentaire..."
             value={retweetText}
             onChange={(e) => setRetweetText(e.target.value)}
           />
-          <button onClick={handleRetweet}>✅ Confirmer le repartage</button>
+          <button onClick={handleRetweet}>✅ Confirmer</button>
         </div>
       )}
 
-      {/* Comment Section */}
-      {showComments && <CommentSection tweetId={tweetToInteractWith._id} loggedInUser={loggedInUser} />}
+      {/* Section des commentaires */}
+      {showComments && (
+        <CommentSection
+          tweetId={tweetToInteractWith._id}
+          loggedInUser={loggedInUser}
+        />
+      )}
+
+      {/* Confirmation de suppression */}
+      {showDeletePopup && (
+        <div className="delete-popup">
+          <p>Voulez-vous vraiment supprimer ce post ?</p>
+          <button onClick={handleDeleteTweet} className="confirm-delete">
+            ✅ Oui
+          </button>
+          <button
+            onClick={() => setShowDeletePopup(false)}
+            className="cancel-delete"
+          >
+            ❌ Non
+          </button>
+        </div>
+      )}
     </div>
   );
 };

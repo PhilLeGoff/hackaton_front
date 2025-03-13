@@ -1,3 +1,4 @@
+
 .comment-section {
   background: #ffffff;
   border: 1px solid #e1e8ed;
@@ -41,7 +42,7 @@
 
 .comment-input button {
   margin-top: 5px;
-  background: #1da1f2;
+  background: #FF85A1;
   color: white;
   padding: 8px;
   border: none;
@@ -52,7 +53,7 @@
 }
 
 .comment-input button:hover {
-  background: #0c85d0;
+  background: teal;
 }
 
 /* Comments container */
@@ -107,7 +108,7 @@
 
 .comment strong {
   font-size: 14px;
-  color: #1da1f2;
+  color: teal;
 }
 
 /* Timestamp aligned right */

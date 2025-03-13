@@ -1,10 +1,13 @@
-import { format, formatDistanceToNow } from "date-fns"; // Import date formatting functions
+
+export default formatTimestamp;
+import { formatDistanceToNow } from "date-fns"; 
+import { fr } from "date-fns/locale"; // ✅ Import French locale
 
 const formatTimestamp = (timestamp) => {
-  if (!timestamp) return ""; // Handle missing timestamps
+  if (!timestamp) return ""; // Gérer les timestamps manquants
   const date = new Date(timestamp);
-  
-  return formatDistanceToNow(date, { addSuffix: true }); // Example: "2 hours ago"
+
+  return formatDistanceToNow(date, { addSuffix: true, locale: fr }); // Ex: "il y a 2 heures"
 };
 
 export default formatTimestamp;
