@@ -126,7 +126,11 @@ h2 {
   gap: 15px;
   padding: 30px;
   align-items: center;
+  color: teal;
+  font-size: 17px;
+  font-weight: 500;
 }
+
 
 .profile-form input {
   padding: 10px;
@@ -134,7 +138,7 @@ h2 {
   border-radius: 5px;
   width: 90%;
   max-width: 1000px;
-  font-size: 0.85rem;
+  font-size: 0.90rem;
   color: rgb(69, 68, 68);
   justify-content: center;
   align-items: center;
