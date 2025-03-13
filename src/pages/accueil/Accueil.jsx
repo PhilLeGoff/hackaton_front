@@ -14,6 +14,7 @@ const Accueil = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [cameraPermission, setCameraPermission] = useState(null);
+  const [detectedEmotion, setDetectedEmotion] = useState(""); // ✅ Stocker l’émotion détectée
 
   const videoRef = useRef(null);
 
@@ -22,18 +23,16 @@ const Accueil = () => {
       try {
         const user = localStorage.getItem("user");
         if (user) {
-          console.log("📥 Logged in user found");
+          console.log("📥 Utilisateur connecté trouvé");
           setLoggedInUser(JSON.parse(user));
         }
       } catch (error) {
-        console.error("😢 Error retrieving user:", error);
+        console.error("😢 Erreur lors de la récupération de l'utilisateur :", error);
       }
     };
 
     fetchUserFromLocalStorage();
     loadTweets();
-
-    // ✅ Activate camera
     requestCameraPermission();
 
     return () => {
@@ -41,29 +40,59 @@ const Accueil = () => {
     };
   }, []);
 
-  // ✅ Function to request camera permission
   const requestCameraPermission = async () => {
     try {
-      console.log("🎥 Requesting camera permission...");
+      console.log("🎥 Demande d'autorisation de la caméra...");
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
       setCameraPermission(true);
-      console.log("✅ Camera activated");
+      console.log("✅ Caméra activée");
     } catch (error) {
       setCameraPermission(false);
-      console.error("❌ Camera permission denied:", error);
+      console.error("❌ Autorisation de la caméra refusée :", error);
     }
   };
 
-  // ✅ Function to stop the camera when component unmounts
   const stopCamera = () => {
     if (videoRef.current && videoRef.current.srcObject) {
       const tracks = videoRef.current.srcObject.getTracks();
       tracks.forEach((track) => track.stop());
-      console.log("📴 Camera stopped");
+      console.log("📴 Caméra arrêtée");
     }
+  };
+
+  const captureAndAnalyze = async () => {
+    if (!videoRef.current) return;
+
+    // 🎥 Capture d'image depuis la caméra
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
+    ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
+    // 📷 Convertir en image Blob
+    canvas.toBlob(async (blob) => {
+      const formData = new FormData();
+      formData.append("image", blob, "capture.jpg");
+
+      try {
+        console.log("📡 Envoi de l'image au serveur Flask...");
+        const response = await fetch("http://localhost:5000/analyze", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        console.log("🧠 Émotion détectée :", data.emotion);
+        setDetectedEmotion(data.emotion); // ✅ Mettre à jour l’émotion détectée
+
+      } catch (error) {
+        console.error("❌ Erreur lors de l'analyse :", error);
+      }
+    }, "image/jpeg");
   };
 
   const loadTweets = async () => {
@@ -72,20 +101,20 @@ const Accueil = () => {
 
     try {
       const data = await TweetService.getTweets(page, 10);
-      console.log("📥 Tweets fetched:", data);
+      console.log("📥 Tweets récupérés :", data);
 
-      setTweets((prevTweets) => [...prevTweets, ...data.tweets]); // Append new tweets
+      setTweets((prevTweets) => [...prevTweets, ...data.tweets]);
       setPage(page + 1);
       setHasMore(data.hasMore);
     } catch (error) {
-      console.error("😢 Error fetching tweets:", error);
+      console.error("😢 Erreur lors de la récupération des tweets :", error);
     } finally {
       setLoading(false);
     }
   };
 
   const refreshFeed = async () => {
-    console.log("🔄 Refreshing feed...");
+    console.log("🔄 Rafraîchissement du fil d'actualité...");
 
     setPage(1);
     setHasMore(true);
@@ -97,13 +126,13 @@ const Accueil = () => {
       if (updatedUser) {
         localStorage.setItem("user", JSON.stringify(updatedUser));
         setLoggedInUser(updatedUser);
-        console.log("✅ Updated user info saved to localStorage");
+        console.log("✅ Informations utilisateur mises à jour");
       }
 
       const data = await TweetService.getTweets(1, 10);
       setTweets(data.tweets);
     } catch (error) {
-      console.error("❌ Error refreshing feed:", error);
+      console.error("❌ Erreur lors du rafraîchissement :", error);
     } finally {
       setLoading(false);
     }
@@ -114,14 +143,24 @@ const Accueil = () => {
       <div className="glass-overlay"></div>
       <div className="homepage-container">
         
-        {/* ✅ Display camera feed */}
+        {/* ✅ Affichage de la caméra */}
         <div className="camera-container">
           <video ref={videoRef} autoPlay playsInline className="camera-feed"></video>
         </div>
 
-        {/* ✅ If permission is denied, show message */}
+        {/* ✅ Affichage de l'émotion détectée */}
+        {detectedEmotion && (
+          <p className="emotion-result">🧠 Émotion détectée : {detectedEmotion}</p>
+        )}
+
+        {/* ✅ Bouton pour analyser l'émotion */}
+        <button className="analyze-btn" onClick={captureAndAnalyze}>
+          Analyser l'émotion
+        </button>
+
+        {/* ✅ Message si la caméra est bloquée */}
         {cameraPermission === false && (
-          <p className="error-message">⚠️ Camera access denied. Please enable it in browser settings.</p>
+          <p className="error-message">⚠️ Accès caméra refusé. Activez-le dans les paramètres du navigateur.</p>
         )}
 
         <div className="tweet-container">
@@ -133,10 +172,10 @@ const Accueil = () => {
             <Tweet key={i} tweet={tweet} loggedInUser={loggedInUser} onInteraction={refreshFeed} />
           ))}
 
-          {loading && <p>⏳ Loading tweets...</p>}
+          {loading && <p>⏳ Chargement des tweets...</p>}
 
           {!loading && hasMore && (
-            <button className="load-more" onClick={loadTweets}>Load More...</button>
+            <button className="load-more" onClick={loadTweets}>Charger plus...</button>
           )}
         </div>
 
