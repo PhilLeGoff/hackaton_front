@@ -187,6 +187,64 @@ const TweetService = {
   getComments: async (tweetId) => {
     return await axios.get(`${API_BASE_URL}/${tweetId}/comments`, { headers: getAuthHeaders() });
   },
+
+  /**
+   * Fetch tweets by hashtag
+   */
+  searchByHashtag: async (hashtag) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/hashtag/${encodeURIComponent(hashtag)}`, {
+        headers: getAuthHeaders(),
+      });
+      return response.data;
+    } catch (error) {
+      console.error("❌ Error searching by hashtag:", error);
+      throw new Error("Failed to search by hashtag");
+    }
+  },
+
+  /**
+   * Fetch tweets by mention (username)
+   */
+  searchByMention: async (username) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/mention/${encodeURIComponent(username)}`, {
+        headers: getAuthHeaders(),
+      });
+      return response.data;
+    } catch (error) {
+      console.error("❌ Error searching by mention:", error);
+      throw new Error("Failed to search by mention");
+    }
+  },
+
+  /**
+   * Fetch tweets by text query
+   */
+  searchByText: async (query) => {
+    try {
+      console.log("query sent", query)
+      const response = await axios.get(`${API_BASE_URL}/search?query=${encodeURIComponent(query)}`, {
+        headers: getAuthHeaders(),
+      });
+      return response.data;
+    } catch (error) {
+      console.error("❌ Error searching by text:", error);
+      throw new Error("Failed to search by text");
+    }
+  },
+
+ findTweetsByUser : async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/search/user`, {
+        headers: getAuthHeaders(),
+      });
+      return response.data;
+    } catch (error) {
+      console.error("❌ Error searching by text:", error);
+      throw new Error("Failed to search by text");
+    }
+  },
 };
 
 export default TweetService;

@@ -50,7 +50,9 @@ export const NotificationProvider = ({ children, user }) => {
       toast.info("💬 Someone mentioned you in their tweet!", { position: "top-right", autoClose: 3000 });
     } else if (type === "mentionComment") {
       toast.info("💬 Someone mentioned you in their comment!", { position: "top-right", autoClose: 3000 });
-    }
+    } else if (type === "follow") {
+      toast.info("💬 Someone just followed you", { position: "top-right", autoClose: 3000 });
+    } 
   };
 
   return (
