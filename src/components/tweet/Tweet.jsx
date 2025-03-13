@@ -74,11 +74,11 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
     <div className="tweet">
       {/* If this is a retweet, show who retweeted it */}
       {isRetweet && (
-        <p className="retweet-info">🔄 Repartagé par @{tweet.retweetedBy?.username}</p>
+        <p className="retweet-info"><b>↳↴</b> repartagé par<b> @{tweet.retweetedBy?.username}</b></p>
       )}
 
       {/* If it's a retweet with additional comment, display it */}
-      {isRetweet && tweet.text && <p className="retweet-text">🗣️ {tweet.text}</p>}
+      {isRetweet && tweet.text && <p className="retweet-text">🗣️{tweet.text}</p>}
 
       {/* Main Tweet Content (for original tweets) */}
       {!isRetweet && (
@@ -119,7 +119,7 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
           {/* ✅ Like & Retweet buttons for the original tweet */}
           <div className="tweet-actions">
             <button onClick={handleLike}>
-              {hasLiked ? "💔 Je n'aime plus" : "❤️ J'aime"} {tweetToInteractWith.likes.length}
+              {hasLiked ? "💔 Je n'aime plus" : "🩷 J'aime"} {tweetToInteractWith.likes.length}
             </button>
             
             {/* ✅ If the user has retweeted, show "Undo Retweet" */}
@@ -138,7 +138,7 @@ const Tweet = ({ tweet, loggedInUser, onInteraction }) => {
       {!isRetweet && (
         <div className="tweet-actions">
           <button onClick={handleLike}>
-            {hasLiked ? "💔 Je n'aime plus" : "❤️ J'aime"} {tweetToInteractWith.likes.length}
+            {hasLiked ? "💔 Je n'aime plus" : "🩷 J'aime"} {tweetToInteractWith.likes.length}
           </button>
           {hasRetweeted ? (
             <button onClick={handleUndoRetweet}>😢 Annuler repartage {tweetToInteractWith.retweets.length}</button>

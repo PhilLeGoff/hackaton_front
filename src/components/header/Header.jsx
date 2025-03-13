@@ -16,6 +16,7 @@ const Header = () => {
 
   return (
     <header className="header">
+      <div className="header-overlay"></div>
       <div className="logo">
         <div>
         <img src="https://i.imgur.com/iV5PR2K.png" alt="EmoTwitt Logo" className="logo-header" />

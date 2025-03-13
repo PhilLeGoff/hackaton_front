@@ -54,6 +54,7 @@ const Signup = () => {
 
   return (
     <div className="login-container">
+      <div className="glass-overlay"></div>
       {/* Left Side Branding */}
       <div className="login-left">
       <div className="logo">

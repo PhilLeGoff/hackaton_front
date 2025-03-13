@@ -36,6 +36,7 @@ const Login = () => {
   return (
     <div className="login-container">
       {/* Left Side Branding */}
+      <div className="glass-overlay"></div>
       <div className="login-left">
       <div className="logo">
         <img src="https://i.imgur.com/iV5PR2K.png" alt="EmoTwitt Logo" className="logo-image" />

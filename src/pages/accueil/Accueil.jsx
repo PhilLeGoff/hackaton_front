@@ -70,6 +70,7 @@ const Accueil = () => {
 
   return (
     <main className="main-content">
+      <div className="glass-overlay"></div>
       <div className="homepage-container">
         <div className="tweet-container">
           {loggedInUser && <TweetPost onTweetPosted={refreshFeed} />}{" "}
