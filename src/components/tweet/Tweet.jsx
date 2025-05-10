@@ -1,3 +1,4 @@
+export default Tweet;
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // ✅ Navigation vers le profil
 import TweetService from "../../services/TweetService";

@@ -1,3 +1,5 @@
+
+export default Header;
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TweetService from "../../services/TweetService"; // ✅ Import TweetService

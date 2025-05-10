@@ -1,3 +1,5 @@
+
+export default formatTimestamp;
 import { formatDistanceToNow } from "date-fns"; 
 import { fr } from "date-fns/locale"; // ✅ Import French locale
 
